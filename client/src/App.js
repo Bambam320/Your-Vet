@@ -11,6 +11,8 @@ function App() {
       .then((data) => setCount(data.count));
   }, []);
 
+// inited the git
+
   return (
     <div className="App">
       <h1>Page Count: {count}</h1>
