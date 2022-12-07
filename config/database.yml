@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: vetapp_production
-  username: vetapp
-  password: <%= ENV["VETAPP_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
