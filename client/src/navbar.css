@@ -1,0 +1,36 @@
+.navbar {
+  margin-left: 2em;
+  width: 95%;
+  padding: 30px 0;
+  box-sizing: border-box;
+  margin-bottom: 80px;
+  border-bottom: 1px solid #333333;
+}
+.navbar ul {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+}
+.navbar .logo {
+  font-weight: bold;
+  color: var(--heading-color);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+.navbar .logo img {
+  margin-left: 2em;
+  margin-right: 10px;
+  width: 36px;
+  margin-top: -8px;
+  width: 100px;
+  height: 50px;
+
+}
+.navbar a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 20px;
+}
