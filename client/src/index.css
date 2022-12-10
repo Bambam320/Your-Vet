@@ -66,10 +66,8 @@ textarea {
   min-height: 160px;
 }
 .error {
-  color: red;
+  color:black;
   background: pink;
-  border: 1px solid red;
-  border-radius: 4px;
   padding: 8px;
-  margin: 10px 0;
+  margin: 4em;
 }

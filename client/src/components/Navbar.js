@@ -5,7 +5,6 @@ import { Link, Outlet } from 'react-router-dom'
 
 //component and other file imports
 import LoggedIn from './LoggedIn'
-import Home from './Home.js'; NAVBAR WILL RENDER HOME AND DISPLAY SOMETHING PROBABLY
 import '../navbar.css';
 
 function Navbar({ handleLogout }) {

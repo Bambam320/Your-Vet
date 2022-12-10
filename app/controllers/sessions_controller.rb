@@ -2,22 +2,23 @@ class SessionsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   
+  # sessions#create
   def create
-    user = User.find_by!(username: user_params[:username])
-    if user&.authenticate(user_params[:password])
-      session[:user_id]= user.id
-      render json: user, status: 201
+    doctor = Doctor.find_by!(username: doctor_params[:username])
+    if doctor&.authenticate(doctor_params[:password])
+      session[:doctor_id]= doctor.id
+      render json: doctor, status: 201
     end
   end
-    
+
   def destroy
-    session.delete :user_id  
+    session.delete :doctor_id  
     head :no_content
   end
 
   private 
 
-  def user_params
+  def doctor_params
     params.permit(:username, :password)
   end
 

@@ -1,14 +1,24 @@
 //functional imports
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 //component and other file imports
 import '../login.css';
 
-const Login = ({setUser}) => {
-  const[username,setUserName] = useState('')
-  const [password, setPassword] =useState('')
+const Login = ({ setUser }) => {
+  // Providing state for login form and errors from backend
+  const [form, setForm] = useState({
+    username: '',
+    password: ''
+  })
   const [errors, setErrors] = useState([]);
-  
+
+  // controls the login form
+  function handleChange(e) {
+    let name = e.target.name
+    let value = e.target.value
+    setForm({ ...form, [name]: value })
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     fetch("/login", {
@@ -16,23 +26,24 @@ const Login = ({setUser}) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
+      body: JSON.stringify(form),
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          console.log(user)
-          setUser(user)});
-        
+          console.log(user) send the user to app and update setuser there
+          setUser(user)
+        });
+
       } else {
         res.json().then((err) => setErrors(err.error));
       }
-      setUserName("")
-      setPassword("")
+      setForm({
+        username: '',
+        password: ''
+      })
     });
   }
+
   return (
     <form onSubmit={handleSubmit} className='auth-form'>
       <h2>Login</h2>
@@ -41,8 +52,9 @@ const Login = ({setUser}) => {
         <input
           required
           type='text'
-          onChange={(e) => setUserName(e.target.value)}
-          value={username}
+          name='username'
+          onChange={handleChange}
+          value={form.username}
         />
       </label>
       <label>
@@ -50,17 +62,18 @@ const Login = ({setUser}) => {
         <input
           required
           type='password'
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
+          name='password'
+          onChange={handleChange}
+          value={form.password}
         />
       </label>
 
       <button className='btn'>Login</button>
       {errors.map((error) => {
-       return  <span key = {error} className='error'>{error}</span>;
+        return <span key = {error} className='error'>{error}</span>;
       })}
     </form>
-    
+
   );
 };
 

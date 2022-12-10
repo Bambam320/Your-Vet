@@ -2,7 +2,7 @@ puts "🌱 Seeding the table with Veterinarians..."
 
 petArray = ["Bird", "Cat", "Dog", "Horse"]
 
-10.times do
+10.times do |n|
   salt = BCrypt::Engine::generate_salt
   passwordDigest = BCrypt::Engine::hash_secret("gg", salt)
   Doctor.create(
@@ -12,7 +12,8 @@ petArray = ["Bird", "Cat", "Dog", "Horse"]
     degree: "Doctorate of Veterinary Medecine from #{Faker::University.name}",
     logo: Faker::Company.logo,
     specialty: petArray[rand(0..3)],
-    password_digest: passwordDigest
+    password_digest: passwordDigest,
+    username: n + 1
   )
 end
 

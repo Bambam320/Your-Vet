@@ -6,7 +6,6 @@ import { LoggedUserContext } from './LoggedUserContext'
 //component and other file imports
 import Navbar from './Navbar.js';
 import Login from './Login.js';
-import Home from './Home.js';
 import Signup from "./Signup.js"
 
 function App() {
@@ -34,7 +33,7 @@ function App() {
     <LoggedUserContext.Provider value={{ currentUser, setCurrentUser }}>
         <Routes>
           <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
-            <Route index path="/login" element={<Login />} />
+            <Route index element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             {/* <Route path="faculty/*" element={<Faculty />} /> //root for faculty tree
             <Route path="student/*" element={<Student />} />
