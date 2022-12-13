@@ -6,35 +6,14 @@ import { LoggedUserContext } from "./LoggedUserContext";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export default function ColorToggleButton() {
-  const [alignment, setAlignment] = React.useState('web');
+function Signup() {
+  const ConsoleLog = ({children}) => {
+    console.log(children);
+    return false
+  }
 
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
-  ) => {
-    setAlignment(newAlignment);
-  };
-
-  return (
-    <ToggleButtonGroup
-      color="primary"
-      value={alignment}
-      exclusive
-      onChange={handleChange}
-      aria-label="Platform"
-    >
-      <ToggleButton value="web">Web</ToggleButton>
-      <ToggleButton value="android">Android</ToggleButton>
-      <ToggleButton value="ios">iOS</ToggleButton>
-    </ToggleButtonGroup>
-  );
-}
-
-
-function Signup(){
   // variables for the rest of the file
-  const defaultValues = {
+  const defaultDoctorValues = {
     username: '',
     password: '',
     password_confirmation: '',
@@ -46,51 +25,119 @@ function Signup(){
     university: '',
     specialty: '',
   }
+  const defaultPetValues = {
+    username: '',
+    password: '',
+    password_confirmation: '',
+    name: '',
+    sex: '',
+    breed: '',
+    color: '',
+    existing_conditions: '',
+    age: null,
+    disposition: '',
+    classification: '',
+  }
 
   // Assigns context and state
   const { setCurrentUser } = useContext(LoggedUserContext)
-  const [form, setForm] = useState(defaultValues);
-
+  const [doctorForm, setDoctorForm] = useState(defaultDoctorValues);
+  const [petForm, setPetForm] = useState(defaultPetValues);
   const [errors, setErrors] = useState([]);
+  const [alignment, setAlignment] = useState('doc');
 
-  //updates the form in state with user input
-  function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+  let formToDisplay = alignment === 'doc' ? doctorForm : petForm
+  // console.log("just before display form triggers")
+  let displayForm = Object.entries(formToDisplay).map((entry, i) => {
+    // console.log("label return firing")
+    // console.log("formto display from inside display form", formToDisplay)
+    return (
+      <label key={i}>
+        <span>{`${entry[0]}:`}</span>
+        <ConsoleLog>{alignment}</ConsoleLog>
+        <ConsoleLog>{entry[1]}</ConsoleLog>
+        
+        <input
+          required
+          name={`${entry[0]}`}
+          type={`${entry[0]}`}
+          onChange={(e) => handleFormChange(e)}
+          value={entry[1]}
+        />
+      </label>
+    )
+  })
+
+  // updates the form in state with user input
+  function handleFormChange(e) {
+    if (alignment === 'doc') {
+      console.log("if is firing")
+      setDoctorForm({
+        ...doctorForm,
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      console.log("else is firing")
+      setPetForm({
+        ...petForm,
+        [e.target.name]: e.target.value,
+      })
+    }
   }
+
+  // console.log("doctordoctordoctordoctor", doctorForm)
+  // console.log("petpetpetpetpetpetpetpet", petForm)
+
+
 
   // Submits the new user information to the back end and sets the current user if validated
-  function handleSubmit(e) {
-    e.preventDefault();
-    fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((user) => setCurrentUser(user));
-        
-      } else {
-        res.json().then((err) => setErrors(err.errors));
-      }
-      setForm(defaultValues)
-    });
-  }
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   fetch("/signup", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(form),
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       res.json().then((user) => setCurrentUser(user));
+
+  //     } else {
+  //       res.json().then((err) => setErrors(err.errors));
+  //     }
+  //     setForm(defaultValues)
+  //   });
+  // }
+
+
+
+  //updates the state for type of user that wants to login
+  function handleToggleChange(e, newAlignment) {
+    setAlignment(newAlignment);
+  };
 
   return (
-    <form onSubmit={handleSubmit} className='auth-form'>
+    // onSubmit={handleSubmit} 
+    <form className='auth-form'>
+      <ToggleButtonGroup
+        color="primary"
+        value={alignment}
+        exclusive
+        onChange={handleToggleChange}
+        aria-label="Platform"
+      >
+        <ToggleButton value="doc">Doctor login</ToggleButton>
+        <ToggleButton value="pet">Pet login</ToggleButton>
+      </ToggleButtonGroup>
       <h2>Sign up</h2>
-      <label>
+      {/* <label>
         <span>username:</span>
         <input
           required
           name='username'
           type='text'
-          onChange={handleChange}
+          onChange={handleFormChange}
           value={form.username}
         />
       </label>
@@ -100,23 +147,14 @@ function Signup(){
           required
           name='password'
           type='password'
-          onChange={handleChange}
+          onChange={handleFormChange}
           value={form.password}
         />
-      </label>
-      <label>
-        <span>confirm password:</span>
-        <input
-          required
-          name='password_confirmation'
-          type='password'
-          onChange={handleChange}
-          value={form.password_confirmation}
-        />
-      </label>
+      </label> */}
+      {displayForm}
       <button className='btn'>Sign up</button>
       {errors.map((error) => {
-       return  <span key = {error} className='error'>{error}</span>;
+        return <span key={error} className='error'>{error}</span>;
       })}
     </form>
   );
