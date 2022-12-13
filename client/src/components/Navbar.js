@@ -6,6 +6,7 @@ import { Link, Outlet } from 'react-router-dom'
 //component and other file imports
 import LoggedIn from './LoggedIn'
 import '../navbar.css';
+import Login from './Login';
 
 // from App.js
 function Navbar({ handleLogout }) {
@@ -23,21 +24,21 @@ function Navbar({ handleLogout }) {
             </Link>
           </li>
           <li>
-            {currentUser ? 
-              <div>
+            {currentUser ?
+              <div className="link">
                 <Link to="/appointments">My Appointments</Link>
-                <Link to="/patients">My Patients</Link> 
+                <Link to="/patients">My Patients</Link>
                 <LoggedIn currentUser={currentUser} />
               </div>
-            : 
+              :
               <div>
-                <Link to="/">Login</Link>
+                <Link to="/login">Login</Link>
                 <Link to="/signup">Signup</Link>
               </div>
             }
           </li>
           <li>
-            <button className='btn' onClick={handleLogout}>Logout</button>
+            {!currentUser ? <></> : <button className='btn' onClick={handleLogout}>Logout</button>}
           </li>
         </ul>
       </div>

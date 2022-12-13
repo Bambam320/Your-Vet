@@ -1,12 +1,50 @@
+// functional imports
 import React, { useState, useContext } from "react";
 import { LoggedUserContext } from "./LoggedUserContext";
+
+// material and file imports
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
+export default function ColorToggleButton() {
+  const [alignment, setAlignment] = React.useState('web');
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string,
+  ) => {
+    setAlignment(newAlignment);
+  };
+
+  return (
+    <ToggleButtonGroup
+      color="primary"
+      value={alignment}
+      exclusive
+      onChange={handleChange}
+      aria-label="Platform"
+    >
+      <ToggleButton value="web">Web</ToggleButton>
+      <ToggleButton value="android">Android</ToggleButton>
+      <ToggleButton value="ios">iOS</ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+
 
 function Signup(){
   // variables for the rest of the file
   const defaultValues = {
     username: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    phone_number: '',
+    name: '',
+    address: '',
+    degree: '',
+    logo: '',
+    university: '',
+    specialty: '',
   }
 
   // Assigns context and state

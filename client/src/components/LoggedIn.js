@@ -1,8 +1,9 @@
 import React from 'react'
 
 const LoggedIn = ({currentUser}) => {
+  console.log(currentUser)
   return (
-    <div style={{marginRight: '3em'}}>{`Logged in as ${currentUser.name}`}</div>
+    <div style={{paddingTop: "1em", marginRight: '3em'}}>{`Logged in as ${currentUser.name}`}</div>
   )
 }
 

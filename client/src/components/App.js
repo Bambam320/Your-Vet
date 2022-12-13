@@ -1,6 +1,6 @@
 //functional imports
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate} from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { LoggedUserContext } from './LoggedUserContext'
 
 //component and other file imports
@@ -42,18 +42,14 @@ function App() {
   return (
     <LoggedUserContext.Provider value={{ currentUser, setCurrentUser }}>
       <Routes>
-          <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
-            <Route path="home" element={<Home />} />
-            <Route path="appointments" element={<Appointments />} />
-            <Route path="patients" element={<Patients />} />
-          </Route>
-          :
-          <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
-            <Route index element={<Login onLogin={setCurrentUser} />} />
-            <Route path="login" element={<Login onLogin={setCurrentUser} />} />
-            <Route path="signup" element={<Signup />} />
-          </Route>
-        }
+        <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
+          <Route index element={<Login onLogin={setCurrentUser} />} />
+          <Route path="home" element={<Home />} />
+          <Route path="appointments" element={<Appointments />} />
+          <Route path="patients" element={<Patients />} />
+          <Route path="login" element={<Login onLogin={setCurrentUser} />} />
+          <Route path="signup" element={<Signup />} />
+        </Route>
       </Routes>
     </LoggedUserContext.Provider>
   )

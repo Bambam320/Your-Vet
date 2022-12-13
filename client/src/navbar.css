@@ -30,7 +30,7 @@
 
 }
 .navbar a {
-  color: #333;
-  text-decoration: none;
+  color: rgb(167, 2, 167);
+  text-decoration: underline;
   margin-right: 20px;
 }
