@@ -17,9 +17,9 @@ function Signup(){
 
   //updates the form in state with user input
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -31,17 +31,13 @@ function Signup(){
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username,
-        password,
-        password_confirmation: passWordConfirmation,
-      }),
+      body: JSON.stringify(form),
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => setCurrentUser(user));
         
       } else {
-        res.json().then((err) => setErrors(err.error));
+        res.json().then((err) => setErrors(err.errors));
       }
       setForm(defaultValues)
     });

@@ -42,7 +42,6 @@ function App() {
   return (
     <LoggedUserContext.Provider value={{ currentUser, setCurrentUser }}>
       <Routes>
-        {currentUser ?
           <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
             <Route path="home" element={<Home />} />
             <Route path="appointments" element={<Appointments />} />
