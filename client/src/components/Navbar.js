@@ -7,6 +7,7 @@ import { Link, Outlet } from 'react-router-dom'
 import LoggedIn from './LoggedIn'
 import '../navbar.css';
 
+// from App.js
 function Navbar({ handleLogout }) {
   //assigning variables and context
   const { currentUser } = useContext(LoggedUserContext)
@@ -16,14 +17,24 @@ function Navbar({ handleLogout }) {
       <div className='navbar'>
         <ul>
           <li className="logo">
-            <img src={'https://i.pinimg.com/originals/b2/ba/9a/b2ba9a8c59456856e37ffa7fe6993093.jpg'} alt="pet" />
-            <Link to="/">Vet & Grooming Services</Link>
+            <Link to="/">
+              <img src={'https://i.pinimg.com/originals/b2/ba/9a/b2ba9a8c59456856e37ffa7fe6993093.jpg'} alt="pet" />
+              Vet & Grooming Services
+            </Link>
           </li>
           <li>
-            {currentUser ? <Link to="/appointments">My Appointments</Link> : <></>}
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
-            {currentUser ? <LoggedIn currentUser={currentUser} /> : <></>}
+            {currentUser ? 
+              <div>
+                <Link to="/appointments">My Appointments</Link>
+                <Link to="/patients">My Patients</Link> 
+                <LoggedIn currentUser={currentUser} />
+              </div>
+            : 
+              <div>
+                <Link to="/">Login</Link>
+                <Link to="/signup">Signup</Link>
+              </div>
+            }
           </li>
           <li>
             <button className='btn' onClick={handleLogout}>Logout</button>

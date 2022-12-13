@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { LoggedUserContext } from "./LoggedUserContext";
 
-function Signup({ setUser }){
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passWordConfirmation, SetPasswordConfirmation] = useState("");
+function Signup(){
+  // variables for the rest of the file
+  const defaultValues = {
+    username: '',
+    password: '',
+    password_confirmation: ''
+  }
+
+  // Assigns context and state
+  const { setCurrentUser } = useContext(LoggedUserContext)
+  const [form, setForm] = useState(defaultValues);
+
   const [errors, setErrors] = useState([]);
 
+  //updates the form in state with user input
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  }
+
+  // Submits the new user information to the back end and sets the current user if validated
   function handleSubmit(e) {
     e.preventDefault();
     fetch("/signup", {
@@ -20,14 +38,12 @@ function Signup({ setUser }){
       }),
     }).then((res) => {
       if (res.ok) {
-        res.json().then((user) => setUser(user));
+        res.json().then((user) => setCurrentUser(user));
         
       } else {
         res.json().then((err) => setErrors(err.error));
       }
-      setUserName("")
-      setPassword("")
-      SetPasswordConfirmation("")
+      setForm(defaultValues)
     });
   }
 
@@ -38,27 +54,30 @@ function Signup({ setUser }){
         <span>username:</span>
         <input
           required
+          name='username'
           type='text'
-          onChange={(e) => setUserName(e.target.value)}
-          value={username}
+          onChange={handleChange}
+          value={form.username}
         />
       </label>
       <label>
         <span>password:</span>
         <input
           required
+          name='password'
           type='password'
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
+          onChange={handleChange}
+          value={form.password}
         />
       </label>
       <label>
         <span>confirm password:</span>
         <input
           required
+          name='password_confirmation'
           type='password'
-          onChange={(e) => SetPasswordConfirmation(e.target.value)}
-          value={passWordConfirmation}
+          onChange={handleChange}
+          value={form.password_confirmation}
         />
       </label>
       <button className='btn'>Sign up</button>

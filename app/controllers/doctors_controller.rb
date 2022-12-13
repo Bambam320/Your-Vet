@@ -8,7 +8,7 @@ class DoctorsController < ApplicationController
   end
 
   def create
-    doctor = User.create!(doctor_params)
+    doctor = Doctor.create!(doctor_params)
     session[:doctor_id]= doctor.id
     render json: doctor, status: :ok
   end
@@ -25,7 +25,7 @@ class DoctorsController < ApplicationController
     end
 
     def render_not_found_response
-      render json: { error: ["User not found"]}, status: :not_found
+      render json: { errors: ["User not found"]}, status: :not_found
     end
 
 end

@@ -1,8 +1,8 @@
 import React from 'react'
 
-const LoggedIn = ({user}) => {
+const LoggedIn = ({currentUser}) => {
   return (
-    <div>{`Logged In: ${user.username}`}</div>
+    <div style={{marginRight: '3em'}}>{`Logged in as ${currentUser.name}`}</div>
   )
 }
 

@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
   end
 
   def render_not_found_response
-    render json: { error: ["User not found"]}, status: :not_found
+    render json: { errors: ["User not found"]}, status: :not_found
   end
 
 end

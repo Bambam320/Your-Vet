@@ -4,7 +4,7 @@ import React, { useState } from "react";
 //component and other file imports
 import '../login.css';
 
-const Login = ({ setUser }) => {
+const Login = ({ onLogin }) => {
   // Providing state for login form and errors from backend
   const [form, setForm] = useState({
     username: '',
@@ -30,8 +30,7 @@ const Login = ({ setUser }) => {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          console.log(user) send the user to app and update setuser there
-          setUser(user)
+          onLogin(user)
         });
 
       } else {
