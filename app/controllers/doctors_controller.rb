@@ -2,7 +2,7 @@ class DoctorsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
-  # /ma
+  # /me
   def show
     doctor = Doctor.find(session[:doctor_id])
     render json: doctor, status: :created
@@ -22,7 +22,7 @@ class DoctorsController < ApplicationController
       params.permit(
         :username, 
         :password, 
-        :password_confirmation, 
+        :password_confirmation,
         :phone_number,
         :name,
         :address,

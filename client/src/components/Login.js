@@ -73,9 +73,11 @@ const Login = ({ onLogin }) => {
         />
       </label>
       <button className='btn'>Login</button>
-      {errors.map((error) => {
-        return <span key = {error} className='error'>{error}</span>;
-      })}
+      <div>
+        {errors.map((error) => {
+          return <span key={error} className='error'>{error}</span>;
+        })}
+      </div>
     </form>
   );
 };

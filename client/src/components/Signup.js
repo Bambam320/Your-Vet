@@ -41,13 +41,24 @@ function Signup() {
     classification: '',
   }
 
-  // Assigns context and state
+  // Assigns hooks
   const { setCurrentUser } = useContext(LoggedUserContext)
   const [doctorForm, setDoctorForm] = useState(defaultDoctorValues);
   const [petForm, setPetForm] = useState(defaultPetValues);
   const [errors, setErrors] = useState([]);
   const [alignment, setAlignment] = useState('doc');
+  const navigate = useNavigate()
 
+  //lists the correct type of input based on the type from entry
+  function listType(entry) {
+    switch(entry[0]) {
+      case 'password_confirmation': return 'password'
+      case 'password': return 'password'
+      case 'age' : return 'number'
+      case 'color' : return 'text'
+      default : return 'text'
+    }
+  }
   //set form to either doctor or pet style from state
   let formToDisplay = alignment === 'doc' ? doctorForm : petForm
   //
@@ -59,14 +70,17 @@ function Signup() {
           //might try a ternary to require only certain attributes
           required
           name={`${entry[0]}`}
-          type={`${entry[0]}`}
+          type={listType(entry)}
           onChange={(e) => handleFormChange(e)}
+          //check how to display color value if selected through a controlled form
           value={entry[1]}
           placeholder={entry[0]}
         />
       </label>
     )
   })
+
+  console.log(petForm)
 
   // updates the form in state with user input based on doctor or pet type
   function handleFormChange(e) {
@@ -95,6 +109,7 @@ function Signup() {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => setCurrentUser(user));
+        navigate("/appointments")
       } else {
         res.json().then((err) => setErrors(err.errors));
       }

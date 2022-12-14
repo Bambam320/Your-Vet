@@ -31,13 +31,14 @@ ul {
   display: inline-block;
 }
 .btn {
-  background: #fff;
+  background: rgb(255, 255, 255);
   padding: 8px 12px;
   border-radius: 4px;
   color: var(--primary-color);
   cursor: pointer;
   font-size: 1em;
   border: 1px solid var(--primary-color);
+  margin-bottom: 1em;
 }
 .btn:hover {
   color: #fff;
@@ -67,7 +68,7 @@ textarea {
 }
 .error {
   color:black;
-  background: pink;
+  background: rgb(228, 125, 142);
   padding: 8px;
-  margin: 4em;
+  margin: 0em;
 }
