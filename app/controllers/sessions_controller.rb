@@ -1,16 +1,20 @@
 class SessionsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+  wrap_parameters format: []
   
-  # sessions#create
+  # /login
   def create
+    puts "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
     doctor = Doctor.find_by!(username: doctor_params[:username])
+byebug
     if doctor&.authenticate(doctor_params[:password])
       session[:doctor_id]= doctor.id
       render json: doctor, status: 201
     end
   end
 
+  # /logout
   def destroy
     session.delete :doctor_id  
     head :no_content

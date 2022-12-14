@@ -6,6 +6,9 @@ ruby "2.7.4"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4"
 
+# for entering console in operation
+gem 'byebug'
+
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
