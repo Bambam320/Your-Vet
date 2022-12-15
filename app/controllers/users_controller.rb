@@ -25,8 +25,8 @@ class UsersController < ApplicationController
       ).permit!
       puts "permitted", permitted_user_params
       puts "permitted", permitted_user_params.permitted?
-  
-      user = doctor.user.create!(permitted_user_params)
+  byebug
+      user = doctor.create_user!(permitted_user_params)
       puts user
       # puts user_params
       # if user_params[:role] == 'doc'
