@@ -37,6 +37,7 @@ class SessionsController < ApplicationController
     elsif session[:animal_id]
       session.delete :animal_id  
       head :no_content
+    end
   end
 
   private 

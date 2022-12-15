@@ -33,7 +33,7 @@ function Navbar({ handleLogout }) {
               :
               <div>
                 <Link to="/login">Login</Link>
-                <Link to="/signup">Signup</Link>
+                <Link to="/users/new">Signup</Link>
               </div>
             }
           </li>

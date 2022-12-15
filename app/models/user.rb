@@ -3,5 +3,5 @@ class User < ApplicationRecord
   
   has_secure_password
   belongs_to :doctor
-  belongs_to :animal
+  # belongs_to :animal
 end

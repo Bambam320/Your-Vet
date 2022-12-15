@@ -49,6 +49,8 @@ function Signup() {
   const [alignment, setAlignment] = useState('doc');
   const navigate = useNavigate()
 
+
+  console.log(alignment)
   //lists the correct type of input based on the type from entry
   function listType(entry) {
     switch(entry[0]) {
@@ -80,8 +82,6 @@ function Signup() {
     )
   })
 
-  console.log(petForm)
-
   // updates the form in state with user input based on doctor or pet type
   function handleFormChange(e) {
     if (alignment === 'doc') {
@@ -100,14 +100,14 @@ function Signup() {
   // Submits the new user information to the back end and sets the current user if validated
   function handleSubmit(e) {
     e.preventDefault();
-    let userType = alignment === 'doc' ? '/doctors' : '/animals'
+    // let userType = alignment === 'doc' ? '/users/new' : '/user/new'
     let formType = alignment === 'doc' ? doctorForm : petForm
-    fetch(userType, {
+    fetch('/users', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formType),
+      body: JSON.stringify({...formType, role: alignment}),
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => setCurrentUser(user));
@@ -136,8 +136,8 @@ function Signup() {
         onChange={handleToggleChange}
         aria-label="Platform"
       >
-        <ToggleButton value="doc">Doctor login</ToggleButton>
-        <ToggleButton value="pet">Pet login</ToggleButton>
+        <ToggleButton value="doc" disabled={alignment === 'doc' ? true : false}>Doctor login</ToggleButton>
+        <ToggleButton value="pet" disabled={alignment === 'doc' ? false : true}>Pet login</ToggleButton>
       </ToggleButtonGroup>
       <h2 style={{marginTop: "20px"}}>{alignment ==='doc' ? "Welcome Doctor" : "Woof, Meow, Chirp and Whinny!"}</h2>
       {displayForm}

@@ -48,7 +48,7 @@ function App() {
           <Route path="appointments" element={<Appointments />} />
           <Route path="patients" element={<Patients />} />
           <Route path="login" element={<Login onLogin={setCurrentUser} />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="users/new" element={<Signup />} />
         </Route>
       </Routes>
     </LoggedUserContext.Provider>
