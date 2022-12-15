@@ -5,22 +5,36 @@ import { useNavigate } from "react-router-dom";
 //component and other file imports
 import '../login.css';
 
+//material imports
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 // from App
 const Login = ({ onLogin }) => {
   // Providing state for login form and errors from backend and navigate from router dom
   const [form, setForm] = useState({
     username: '',
-    password: ''
+    password: '',
+    role: 'Doctor',
   })
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 
-  // controls the login form
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  // controls the login form values
+  const handleChange = (e) => {
+    console.log(e)
+    let name = e.target.name === 'role' ? 'role' : e.target.name
+    let value = e.target.name === 'role' ? e.target.checked === true ? e.target.value : null : e.target.value
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
-  console.log("errors", errors)
+  console.log(form)
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -52,6 +66,28 @@ const Login = ({ onLogin }) => {
   return (
     <form onSubmit={handleSubmit} className='auth-form'>
       <h2>Login</h2>
+      <FormControl>
+        <RadioGroup
+          style={{marginBottom: '-40px'}}
+          name="role"
+          value={form.role}
+          onChange={handleChange}
+          row
+        >
+          <FormControlLabel
+            key="Doctor"
+            value="Doctor"
+            control={<Radio size="small" />}
+            label="Doctor"
+          />
+          <FormControlLabel
+            key="Pet"
+            value="Pet"
+            control={<Radio size="small" />}
+            label="Pet"
+          />
+        </RadioGroup>
+      </FormControl>
       <label>
         <span>username:</span>
         <input

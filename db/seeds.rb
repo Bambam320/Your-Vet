@@ -19,8 +19,10 @@ end
 
 puts "🌸 Veterinarians have been sewn, seeding Pets... 🌱"
 
-20.times do
+20.times do |n|
   type = petArray[rand(0..3)]
+  salt = BCrypt::Engine::generate_salt
+  passwordDigest = BCrypt::Engine::hash_secret("gg", salt)
   case type
   when "Cat" 
     fakeAnimalName = Faker::Creature::Cat.name
@@ -45,14 +47,16 @@ puts "🌸 Veterinarians have been sewn, seeding Pets... 🌱"
   end
   Animal.create(
     name: fakeAnimalName,
-    classification: type,
     sex: Faker::Creature::Dog.gender,
     breed: fakeAnimalBreed,
     color: fakeAnimalColor,
-    age: fakeAnimalAge,
     existing_conditions: "#{Faker::Lorem.sentence(word_count: 3)}, #{Faker::Lorem.sentence(word_count: 3)}",
     notes: Faker::Lorem.paragraph,
-    disposition: Faker::Creature::Bird.emotional_adjective
+    age: fakeAnimalAge,
+    disposition: Faker::Creature::Bird.emotional_adjective,
+    classification: type,
+    password_digest: passwordDigest,
+    username: n + 1,
   )
 end
 

@@ -100,12 +100,14 @@ function Signup() {
   // Submits the new user information to the back end and sets the current user if validated
   function handleSubmit(e) {
     e.preventDefault();
-    fetch("/signup", {
+    let userType = alignment === 'doc' ? '/doctors' : '/animals'
+    let formType = alignment === 'doc' ? doctorForm : petForm
+    fetch(userType, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(alignment === 'doc' ? doctorForm : petForm),
+      body: JSON.stringify(formType),
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => setCurrentUser(user));

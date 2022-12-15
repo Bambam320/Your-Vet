@@ -5,25 +5,47 @@ class SessionsController < ApplicationController
   
   # /login
   def create
-    doctor = Doctor.find_by!(username: doctor_params[:username])
-    if doctor&.authenticate(doctor_params[:password])
+    if params[:role] == 'Doctor' 
+      Doctor.find_by!(username: doctor_params[:username])&.authenticate(doctor_params[:password])
       session[:doctor_id]= doctor.id
       render json: doctor, status: 201
+    elsif params[:role] == 'Doctor' 
+      Animal.find_by!(username: animal_params[:username])&.authenticate(animal_params[:password])
+      animal = Animal.find(session[:animal_id])
+      render json: animal, status: 201
     else
       render json: { errors: ["Username or Password is incorrect"] }, status: :unprocessable_entity
     end    
   end
   
+  # /me
+  def show
+    if session[:doctor_id]
+      doctor = Doctor.find(session[:doctor_id])
+      render json: doctor, status: :created
+    elsif session[:animal_id]
+      animal = Animal.find(session[:animal_id])
+      render json: animal, status: :created
+    end
+  end
 
   # /logout
   def destroy
-    session.delete :doctor_id  
-    head :no_content
+    if session[:doctor_id]
+      session.delete :doctor_id  
+      head :no_content
+    elsif session[:animal_id]
+      session.delete :animal_id  
+      head :no_content
   end
 
   private 
 
   def doctor_params
+    params.permit(:username, :password)
+  end
+
+  def animal_params
     params.permit(:username, :password)
   end
 

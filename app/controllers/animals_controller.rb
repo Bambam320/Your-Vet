@@ -1,51 +1,60 @@
 class AnimalsController < ApplicationController
-  before_action :set_animal, only: %i[ show update destroy ]
-
-  # GET /animals
-  def index
-    @animals = Animal.all
-
-    render json: @animals
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+  def create
+    animal = Animal.create!(animal_params)
+    session[:animal_id] = animal.id
+    render json: animal, status: :ok
   end
 
   # GET /animals/1
-  def show
-    render json: @animal
-  end
+  # def show
+  #   animal = Animal.find(session[:animal_id])
+  #   render json: animal, status: :created
+  # end
 
-  # POST /animals
-  def create
-    @animal = Animal.new(animal_params)
+  # # GET /animals
+  # def index
+  #   @animals = Animal.all
 
-    if @animal.save
-      render json: @animal, status: :created, location: @animal
-    else
-      render json: @animal.errors, status: :unprocessable_entity
-    end
-  end
+  #   render json: @animals
+  # end
 
-  # PATCH/PUT /animals/1
-  def update
-    if @animal.update(animal_params)
-      render json: @animal
-    else
-      render json: @animal.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /animals/1
-  def destroy
-    @animal.destroy
-  end
+  # # PATCH/PUT /animals/1
+  # def update
+  #   if @animal.update(animal_params)
+  #     render json: @animal
+  #   else
+  #     render json: @animal.errors, status: :unprocessable_entity
+  #   end
+  # end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_animal
-      @animal = Animal.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def animal_params
-      params.require(:animal).permit(:name, :sex, :breed, :color, :age, :existing_conditions, :notes)
+      params.permit(
+        :name, 
+        :sex, 
+        :breed, 
+        :color, 
+        :age, 
+        :existing_conditions, 
+        :notes,
+        :age,
+        :disposition,
+        :classification,
+        :username,
+        :password,
+        :password_confirmation,
+      )
     end
+
+    def render_unprocessable_entity_response invalid
+      render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
+    end
+
+    def render_not_found_response
+      render json: { errors: ["User not found"]}, status: :not_found
+    end
+
 end
