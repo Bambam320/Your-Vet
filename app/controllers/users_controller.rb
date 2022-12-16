@@ -16,18 +16,13 @@ class UsersController < ApplicationController
         :specialty,
         :mook,
       ).permit!
-      puts "permitted", permitted_doctor_params
-      puts "permitted", permitted_doctor_params.permitted?
       doctor = Doctor.create!(permitted_doctor_params)
-      puts doctor
       permitted_user_params = params.extract!(
         :username, :password, :password_confirmation, :role
       ).permit!
-      puts "permitted", permitted_user_params
-      puts "permitted", permitted_user_params.permitted?
-  byebug
       user = doctor.create_user!(permitted_user_params)
-      puts user
+      session[:user_id] = user.id
+      render json: user , status: :created
       # puts user_params
       # if user_params[:role] == 'doc'
       #   puts "params", user_params

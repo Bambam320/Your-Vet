@@ -3,5 +3,4 @@ class User < ApplicationRecord
   
   has_secure_password
   belongs_to :user_info, polymorphic: true
-  # belongs_to :animal
 end

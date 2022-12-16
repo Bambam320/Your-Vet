@@ -49,8 +49,6 @@ function Signup() {
   const [alignment, setAlignment] = useState('doc');
   const navigate = useNavigate()
 
-
-  console.log(alignment)
   //lists the correct type of input based on the type from entry
   function listType(entry) {
     switch(entry[0]) {
@@ -110,7 +108,9 @@ function Signup() {
       body: JSON.stringify({...formType, role: alignment}),
     }).then((res) => {
       if (res.ok) {
-        res.json().then((user) => setCurrentUser(user));
+        res.json().then((user) => {
+          console.log("useruseruser", user)
+          setCurrentUser(user)});
         navigate("/appointments")
       } else {
         res.json().then((err) => setErrors(err.errors));
