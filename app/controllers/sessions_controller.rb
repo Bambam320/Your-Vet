@@ -5,14 +5,10 @@ class SessionsController < ApplicationController
   
   # /login
   def create
-    if params[:role] == 'Doctor' 
-      Doctor.find_by!(username: doctor_params[:username])&.authenticate(doctor_params[:password])
-      session[:doctor_id]= doctor.id
-      render json: doctor, status: 201
-    elsif params[:role] == 'Doctor' 
-      Animal.find_by!(username: animal_params[:username])&.authenticate(animal_params[:password])
-      animal = Animal.find(session[:animal_id])
-      render json: animal, status: 201
+    user = User.find_by(username: user_params[:username])
+    if user&.authenticate(user_params[:password])
+      session[:user_id]= user.id
+      render json: user, status: 201
     else
       render json: { errors: ["Username or Password is incorrect"] }, status: :unprocessable_entity
     end    
@@ -20,34 +16,22 @@ class SessionsController < ApplicationController
   
   # /me
   def show
-    if session[:doctor_id]
-      doctor = Doctor.find(session[:doctor_id])
-      render json: doctor, status: :created
-    elsif session[:animal_id]
-      animal = Animal.find(session[:animal_id])
-      render json: animal, status: :created
+    if session[:user_id]
+      user = User.find(session[:user_id])
+      render json: user, status: :ok
     end
   end
 
   # /logout
   def destroy
-    if session[:doctor_id]
-      session.delete :doctor_id  
-      head :no_content
-    elsif session[:animal_id]
-      session.delete :animal_id  
-      head :no_content
-    end
+    session[:user_id] = nil
+    head :no_content
   end
 
   private 
 
-  def doctor_params
-    params.permit(:username, :password)
-  end
-
-  def animal_params
-    params.permit(:username, :password)
+  def user_params
+    params.permit(:username, :password, :role)
   end
 
   def render_unprocessable_entity_response invalid

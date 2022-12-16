@@ -36,7 +36,7 @@ function Signup() {
     breed: '',
     color: '',
     existing_conditions: '',
-    age: null,
+    age: 0,
     disposition: '',
     classification: '',
   }

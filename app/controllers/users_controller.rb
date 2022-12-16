@@ -6,35 +6,23 @@ class UsersController < ApplicationController
     #  Users#Signup
     def create
       if params[:role] == 'doc'
-      permitted_doctor_params = params.extract!(
-        :phone_number,
-        :name,
-        :address,
-        :degree,
-        :logo,
-        :university,
-        :specialty,
-        :mook,
-      ).permit!
+      permitted_doctor_params = params.extract!(:phone_number, :name, :address, :degree, :logo, :university, :specialty).permit!
       doctor = Doctor.create!(permitted_doctor_params)
       permitted_user_params = params.extract!(
         :username, :password, :password_confirmation, :role
       ).permit!
       user = doctor.create_user!(permitted_user_params)
       session[:user_id] = user.id
-      render json: user, serializer: UserDoctorSerializer, status: :created
-      # puts user_params
-      # if user_params[:role] == 'doc'
-      #   puts "params", user_params
-      #   doctor = Doctor.create!(user_params.extract!())
-      #   puts "doctor", doctor
-      #   session[:user_id] = user.id
-      #   render json: user, status: :created
-      # elsif @user_params[:role] == 'pet'
-      #   animal = Animal.create!(@animal_params)
-      #   user = doctor.users.create!(@user_params)
-      #   session[:user_id] = user.id
-      #   render json: user, status: :created
+      render json: user, status: :created
+    elsif params[:role] == 'pet'
+      permitted_animal_params = params.extract!(:name, :sex, :breed, :color, :existing_conditions, :age, :disposition, :classification).permit!
+      animal = Animal.create!(permitted_animal_params)
+      permitted_user_params = params.extract!(
+        :username, :password, :password_confirmation, :role
+      ).permit!
+      user = animal.create_user!(permitted_user_params)
+      session[:user_id] = user.id
+      render json: user, status: :created
       end
     end
 
