@@ -14,6 +14,7 @@ import Profile from './Profile';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null)
+  const [appointments, setAppointments] = useState([])
   const navigate = useNavigate()
 
   // fetch on render to auto-login
@@ -41,7 +42,7 @@ function App() {
 
   //provides context to and route to entire app
   return (
-    <LoggedUserContext.Provider value={{ currentUser, setCurrentUser }}>
+    <LoggedUserContext.Provider value={{ currentUser, setCurrentUser, appointments, setAppointments }}>
       <Routes>
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
           <Route index element={<Login onLogin={setCurrentUser} />} />

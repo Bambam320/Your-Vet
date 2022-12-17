@@ -1,3 +1,5 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :date, :location, :doctor_id, :animal_id, :concern, :diagnosis, :prognosis
+  attributes :id, :location, :time, :doctor_id, :animal_id, :concern, :diagnosis, :prognosis
+  belongs_to :doctor
+  belongs_to :animal
 end

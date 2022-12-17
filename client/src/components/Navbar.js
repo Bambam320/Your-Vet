@@ -13,6 +13,7 @@ function Navbar({ handleLogout }) {
   //assigning variables and context
   const { currentUser } = useContext(LoggedUserContext)
 
+
   return (
     <>
       <div className='navbar'>
