@@ -26,6 +26,10 @@ class UsersController < ApplicationController
       end
     end
 
+    def show
+      render User.find(session[:user_id]), status: :ok
+    end
+
   private
 
     def render_unprocessable_entity_response invalid

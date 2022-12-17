@@ -25,7 +25,6 @@ const Login = ({ onLogin }) => {
 
   // controls the login form values
   const handleChange = (e) => {
-    console.log(e)
     let name = e.target.name === 'role' ? 'role' : e.target.name
     let value = e.target.name === 'role' ? e.target.checked === true ? e.target.value : null : e.target.value
     setForm({
@@ -34,11 +33,8 @@ const Login = ({ onLogin }) => {
     });
   };
 
-  console.log(form)
-
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(form)
     fetch("/login", {
       method: "POST",
       headers: {
@@ -48,7 +44,6 @@ const Login = ({ onLogin }) => {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          console.log("from login after fetch", user)
           onLogin(user)
           setTimeout(navigate("/appointments"), 500)
         });

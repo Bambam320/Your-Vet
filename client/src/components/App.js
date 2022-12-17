@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { LoggedUserContext } from './LoggedUserContext'
 
-//component and other file imports
+//component imports
 import Navbar from './Navbar.js';
 import Login from './Login.js';
 import Signup from "./Signup.js";
 import Appointments from './Appointments';
 import Patients from './Patients';
 import Home from './Home';
+import Profile from './Profile';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -49,6 +50,7 @@ function App() {
           <Route path="patients" element={<Patients />} />
           <Route path="login" element={<Login onLogin={setCurrentUser} />} />
           <Route path="users/new" element={<Signup />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </LoggedUserContext.Provider>

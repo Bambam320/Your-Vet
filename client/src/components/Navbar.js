@@ -26,6 +26,7 @@ function Navbar({ handleLogout }) {
           <li>
             {currentUser ?
               <div className="link">
+                <Link to="/profile">My Profile</Link>
                 <Link to="/appointments">My Appointments</Link>
                 <Link to="/patients">My Patients</Link>
                 <LoggedIn currentUser={currentUser} />
