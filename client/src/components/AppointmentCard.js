@@ -71,7 +71,11 @@ function AppointmentCard({ appointment }) {
     <React.Fragment>
       <CardContent>
       {updateToggle ? (
-        <AppointmentCardUpdate appointment={appointment} changeToggle={onUpdateToggle} />
+        <AppointmentCardUpdate 
+          appointment={appointment} 
+          setErrors={setErrors}
+          changeToggle={onUpdateToggle} 
+        />
       ) : (
         <></>
       )}

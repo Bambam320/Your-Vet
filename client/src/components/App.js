@@ -8,6 +8,7 @@ import Navbar from './Navbar.js';
 import Login from './Login.js';
 import Signup from "./Signup.js";
 import Appointments from './Appointments';
+import AppointmentForm from './AppointmentForm';
 import Patients from './Patients';
 import Home from './Home';
 import Profile from './Profile';
@@ -60,7 +61,9 @@ function App() {
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
           <Route index element={<Login onLogin={setCurrentUser} />} />
           <Route path="home" element={<Home />} />
-          <Route path="appointments" element={<Appointments />} />
+          <Route path="appointments/" element={<Appointments />} >
+            <Route path="new" element={<AppointmentForm />} />
+          </Route>
           <Route path="patients" element={<Patients />} />
           <Route path="login" element={<Login onLogin={setCurrentUser} />} />
           <Route path="users/" element={<AllProfileCard currentUser={currentUser} />} >

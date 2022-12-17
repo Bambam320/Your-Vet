@@ -2,8 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { LoggedUserContext } from './LoggedUserContext';
 
-function AppointmentCardUpdate({ appointment, changeToggle }) {
-  const [errors, setErrors] = useState([]);
+function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
   const [form, setForm] = useState(appointment);
   const { setAppointments, appointments } = useContext(LoggedUserContext);
 
@@ -74,13 +73,6 @@ function AppointmentCardUpdate({ appointment, changeToggle }) {
           ></textarea>
         </label>
         <button className='btn'>Update Review</button>
-        {errors.map((error) => {
-          return (
-            <span key={error} className='error'>
-              {error}
-            </span>
-          );
-        })}
         <button className='btn' onClick={handleCancel}>Cancel</button>
       </form>
     </>
