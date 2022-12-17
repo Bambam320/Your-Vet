@@ -87,7 +87,14 @@ function AppointmentCard({ appointment }) {
       </CardContent>
       <CardActions>
         <Button variant="contained" size="small" onClick={onUpdateToggle}>Update This appointment!</Button>
-        <Button variant="contained" size="small" sx={{color: 'black', backgroundColor: 'red'}} onClick={handleDeleteClick}>Delete this appointment!</Button>
+        <Button 
+          variant="contained" 
+          size="small" 
+          sx={{color: 'black', backgroundColor: 'red'}} 
+          onClick={handleDeleteClick}
+        >
+            Delete this appointment!
+        </Button>
       </CardActions>
       <CardContent>
         {errors.map((error) => {

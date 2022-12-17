@@ -1,28 +1,22 @@
-import React,{useState,useContext, useEffect} from 'react'
-import { MyContext } from "./MyContext";
+//functional imports
+import React, { useState, useContext, useEffect } from 'react'
+import { LoggedUserContext } from './LoggedUserContext';
 
-function AppointmentCardUpdate({ review, changeToggle }) {
+function AppointmentCardUpdate({ appointment, changeToggle }) {
   const [errors, setErrors] = useState([]);
-  const [form, setForm] = useState({
-    title:"",
-    comment:"",
-  rating:0});
-  const { setReviews, reviews } = useContext(MyContext);
+  const [form, setForm] = useState(appointment);
+  const { setAppointments, appointments } = useContext(LoggedUserContext);
 
-   useEffect(()=>{
-    setForm(review)
-  },[review])
-  
-  
   function handleChange(e) {
     let name = e.target.name;
     let value = e.target.value;
     setForm({ ...form, [name]: value });
   }
+  console.log(appointment.id)
 
   function handleSubmit(e) {
     e.preventDefault()
-    fetch(`/reviews/${review.id}`, {
+    fetch(`/appointments/${appointment.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -30,15 +24,15 @@ function AppointmentCardUpdate({ review, changeToggle }) {
       body: JSON.stringify(form),
     }).then((res) => {
       if (res.ok) {
-        res.json().then((review) => {
-          const updatedReviews = reviews.map((rev) => {
-             if(rev.id === review.id) {
-              return review
-             } else {
-              return rev
-             }
-        })
-        setReviews(updatedReviews)
+        res.json().then((updatedAppointment) => {
+          const updatedAppointments = appointments.map((app) => {
+            if (app.id === updatedAppointment.id) {
+              return updatedAppointment
+            } else {
+              return app
+            }
+          })
+          setAppointments(updatedAppointments)
         })
       } else {
         res.json().then((err) => setErrors(err.error));
@@ -46,6 +40,7 @@ function AppointmentCardUpdate({ review, changeToggle }) {
     });
     changeToggle()
   }
+
   function handleCancel() {
     changeToggle()
   }
@@ -53,41 +48,40 @@ function AppointmentCardUpdate({ review, changeToggle }) {
 
   return (
     <>
-    <div>{`${review.title}`}</div>
+      <div>{`Change the details of your appointment with ${appointment.doctor.name}`}</div>
       <form onSubmit={handleSubmit}>
         <label>
-          <span>Update title:</span>
+          <span>Update the time:</span>
           <textarea
             style={{ minHeight: "10px", maxWidth: "40em" }}
             onChange={handleChange}
-            name='title'
-            value={form.title}
+            name='time'
+            value={form.time}
           ></textarea>
-          <span>Update new review:</span>
+          <span>Update the location:</span>
           <textarea
+            style={{ minHeight: "10px", maxWidth: "40em" }}
             onChange={handleChange}
-            value={form.comment}
-            name='comment'
+            name='location'
+            value={form.location}
           ></textarea>
-          {/* Stretch Goal make stars */}
-          <span>Update rating:</span>
+          <span>Update the concern or provide more details:</span>
           <textarea
-            style={{ minHeight: "10px", maxWidth: "10em" }}
+            style={{ minHeight: "10px", maxWidth: "40em" }}
             onChange={handleChange}
-            name='rating'
-            value={form.rating}
+            name='concern'
+            value={form.concern}
           ></textarea>
         </label>
         <button className='btn'>Update Review</button>
         {errors.map((error) => {
-        return (
-          <span key={error} className='error'>
-            {error}
-          </span>
-        );
-      })}
+          return (
+            <span key={error} className='error'>
+              {error}
+            </span>
+          );
+        })}
         <button className='btn' onClick={handleCancel}>Cancel</button>
-
       </form>
     </>
   )

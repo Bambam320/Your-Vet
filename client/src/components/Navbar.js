@@ -50,3 +50,4 @@ function Navbar({ handleLogout }) {
 }
 
 export default Navbar;
+

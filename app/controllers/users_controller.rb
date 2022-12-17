@@ -3,6 +3,13 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   wrap_parameters format: []
   
+    #Users#all
+    def index
+      type_of = User.find(session[:user_id]).role
+      users = User.all.where(role: type_of)
+      render json: users, status: :ok
+    end
+
     #  Users#Signup
     def create
       if params[:role] == 'doc'

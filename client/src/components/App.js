@@ -11,9 +11,22 @@ import Appointments from './Appointments';
 import Patients from './Patients';
 import Home from './Home';
 import Profile from './Profile';
+import AllProfileCard from './AllProfileCard'
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null)
+  const defaultValues = {
+    id: 0,
+    role: '',
+    user_info: {
+      doctor: {
+        name: ''
+      },
+      animal: {
+        name: ''
+      }
+    }
+  }
+  const [currentUser, setCurrentUser] = useState(defaultValues)
   const [appointments, setAppointments] = useState([])
   const navigate = useNavigate()
 
@@ -29,7 +42,7 @@ function App() {
     fetch("/logout", { method: "DELETE" })
       .then((res) => {
         if (res.ok) {
-          setCurrentUser(null)
+          setCurrentUser(defaultValues)
           navigate('/login')
         }
       })
@@ -50,8 +63,12 @@ function App() {
           <Route path="appointments" element={<Appointments />} />
           <Route path="patients" element={<Patients />} />
           <Route path="login" element={<Login onLogin={setCurrentUser} />} />
-          <Route path="users/new" element={<Signup />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="users/" element={<AllProfileCard currentUser={currentUser} />} >
+            <Route path="new" element={<Signup />} />
+            <Route path=":id" element={<Profile />} />
+
+          </Route>
+          {currentUser ? <Route path="profile" element={<Profile />} /> : <React.Fragment>Loading</React.Fragment>}
         </Route>
       </Routes>
     </LoggedUserContext.Provider>
