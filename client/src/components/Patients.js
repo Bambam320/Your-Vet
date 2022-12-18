@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function Patients() {
+
+  useEffect(() => {
+    fetch
+  },  [])
   return (
-    <div>Patients</div>
+    <div>
+      <span>My Current Patients</span>
+    </div>
   )
 }
 
