@@ -3,15 +3,10 @@ class DoctorsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
   def create
-    # doctor = Doctor.create!(doctor_params)
-    # session[:user_id] = doctor.id
-    # render json: doctor, status: :ok
+    doctor = Doctor.create!(doctor_params)
+    session[:user_id] = doctor.id
+    render json: doctor, status: :ok
   end
-  
-  # def show
-  #   doctor = Doctor.find(session[:doctor_id])
-  #   render json: doctor, status: :created
-  # end
   
   private
 

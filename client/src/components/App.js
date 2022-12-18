@@ -44,7 +44,7 @@ function App() {
       .then((res) => {
         if (res.ok) {
           setCurrentUser(defaultValues)
-          navigate('/login')
+          navigate('/')
         }
       })
   }
@@ -59,18 +59,16 @@ function App() {
     <LoggedUserContext.Provider value={{ currentUser, setCurrentUser, appointments, setAppointments }}>
       <Routes>
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
-          <Route index element={<Login onLogin={setCurrentUser} />} />
-          <Route path="home" element={<Home />} />
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login onLogin={setCurrentUser} />} />
           <Route path="appointments/" element={<Appointments />} >
             <Route path="new" element={<AppointmentForm />} />
           </Route>
-          <Route path="patients" element={<Patients />} />
-          <Route path="login" element={<Login onLogin={setCurrentUser} />} />
           <Route path="users/" element={<AllProfileCard currentUser={currentUser} />} >
             <Route path="new" element={<Signup />} />
             <Route path=":id" element={<Profile />} />
-
           </Route>
+          <Route path="patients" element={<Patients />} />
           {currentUser ? <Route path="profile" element={<Profile />} /> : <React.Fragment>Loading</React.Fragment>}
         </Route>
       </Routes>

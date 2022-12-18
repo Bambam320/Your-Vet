@@ -3,3 +3,4 @@ class AppointmentSerializer < ActiveModel::Serializer
   belongs_to :doctor
   belongs_to :animal
 end
+

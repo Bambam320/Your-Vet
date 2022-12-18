@@ -1,5 +1,4 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: %i[ show update destroy ]
   before_action :authorize_general, only: [:create] 
   before_action :authorize_user, only: [:update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
@@ -11,33 +10,26 @@ class AppointmentsController < ApplicationController
   end
 
   def create
-    @appointment = Appointment.new(appointment_params)
-
-    if @appointment.save
-      render json: @appointment, status: :created, location: @appointment
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
+    appointment = Appointment.create!(appointment_params)
+    if appointment
+      render json: appointment, status: :created
     end
   end
 
   def update
-    if @appointment.update(appointment_params)
-      render json: @appointment
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
+    appointment = Appointment.find(params[:id])
+    if appointment.update!(appointment_params)
+      render json: appointment, status: :ok
     end
   end
 
   def destroy
-    @appointment.destroy
-    render json: @appointment
+    appointment = Appointment.find(params[:id])
+    appointment.destroy
+    render json: appointment
   end
 
   private
-
-    def set_appointment
-      @appointment = Appointment.find(params[:id])
-    end
 
     def appointment_params
       params.permit(:time, :location, :doctor_id, :animal_id, :concern, :diagnosis, :prognosis)

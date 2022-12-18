@@ -20,7 +20,6 @@ function Appointments() {
       .then((res) => {
         if (res.ok) {
           res.json().then((appointments) => {
-            console.log(appointments)
             setAppointments(appointments)
           });
         } else {
@@ -29,7 +28,6 @@ function Appointments() {
       });
   }, [])
 
-  console.log("appointments", appointments)
   return (
     <div className='project-list'>
         <Button 

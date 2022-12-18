@@ -11,7 +11,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
     let value = e.target.value;
     setForm({ ...form, [name]: value });
   }
-  console.log(appointment.id)
+  console.log(appointment)
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -70,6 +70,13 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
             onChange={handleChange}
             name='concern'
             value={form.concern}
+          ></textarea>
+          <span>Update the diagnosis:</span>
+          <textarea
+            style={{ minHeight: "10px", maxWidth: "40em" }}
+            onChange={handleChange}
+            name='diagnosis'
+            value={form.diagnosis}
           ></textarea>
         </label>
         <button className='btn'>Update Review</button>
