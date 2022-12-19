@@ -14,6 +14,8 @@ function AllProfileCard({ currentUser }) {
   const [animalUsers, setAnimalUsers] = useState([]);
   const [errors, setErrors] = useState([]);
 
+  console.log("allprofile card is firing")
+
   useEffect(() => {
     fetch("/users")
       .then((res) => {
@@ -50,9 +52,6 @@ function AllProfileCard({ currentUser }) {
       </Box>
     )
   })
-
-  console.log("doctor", doctorUsers)
-  console.log("animal", animalUsers)
 
   return (
     <div>

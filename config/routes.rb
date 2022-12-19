@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :create, :index]
   resources :animals, only: [:index, :create]
   resources :appointments, only: [:index, :create, :update, :destroy]
-  resources :doctors, only: [:index, :create]
+  resources :doctors, only: [:index, :create, :show]
   get '/me', to: "sessions#show"
   post '/login', to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

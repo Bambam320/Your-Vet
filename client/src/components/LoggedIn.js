@@ -4,7 +4,7 @@ const LoggedIn = ({currentUser}) => {
 
   return (
     <div style={{paddingTop: "1em", marginRight: '3em'}}>
-      {currentUser.id ? 
+      {currentUser.id > 0 ? 
         `Logged in as ${currentUser.role === "doc" ? 
           currentUser.user_info.doctor.name 
             : 

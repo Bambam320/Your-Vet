@@ -13,7 +13,6 @@ function Navbar({ handleLogout }) {
   //assigning variables and context
   const { currentUser } = useContext(LoggedUserContext)
 
-
   return (
     <>
       <div className='navbar'>
@@ -25,7 +24,7 @@ function Navbar({ handleLogout }) {
             </Link>
           </li>
           <li>
-            {currentUser ?
+            {currentUser.id > 0 ?
               <div className="link">
                 <Link to="/profile">My Profile</Link>
                 <Link to="/appointments">My Appointments</Link>

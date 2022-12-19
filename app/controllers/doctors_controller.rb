@@ -8,11 +8,17 @@ class DoctorsController < ApplicationController
     render json: doctor, status: :ok
   end
   
+  def show
+    doctor = Doctor.find(params[:id])
+    render json: doctor, status: :ok
+  end
+
   private
 
     # Only allow a list of trusted parameters through.
     def doctor_params
       params.permit(
+        :id,
         :phone_number,
         :name,
         :address,

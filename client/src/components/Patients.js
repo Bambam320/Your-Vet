@@ -1,76 +1,136 @@
-import React, { useEffect } from 'react'
+
+import React, { useEffect, useContext, useState } from 'react';
+import { LoggedUserContext } from './LoggedUserContext';
+
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { Card } from '@mui/material';
 
 function Patients() {
-
-  useEffect(() => {
-    fetch
-  },  [])
-
-  const [isClicked, setIsClicked] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-  
   const sortOptions = [
-    {value: '', text: 'Select'},
-    {value: 'User A-Z', text: 'User A-Z'},
-    {value: 'Comment A-Z', text: 'Comment A-Z'},
-    {value: 'Most upvotes', text: 'Most Upvotes'},
-    {value: 'Most downvotes', text: 'Most Downvotes'}
+    { value: '', text: 'Select' },
+    { value: 'name', text: 'Patient Name A-Z' },
+    { value: 'dog', text: 'Type: Dog' },
+    { value: 'cat', text: 'Type: Cat' },
+    { value: 'bird', text: 'Type: Bird' },
+    { value: 'horse', text: 'Type: Horse' },
+    { value: 'age old', text: 'Age: Oldest first' },
+    { value: 'age young', text: 'Age: Youngest first' },
   ]
 
-  const [sortBy, setSortBy] = useState(sortOptions[0].value)
+  const { currentUser } = useContext(LoggedUserContext);
+  const [animals, setAnimals] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const [sortBy, setSortBy] = useState(sortOptions[0].value);
+  const [searchTerm, setSearchTerm] = useState('')
 
-  function handleClick(event) {
-    const name = event.target.name
-    const value = parseInt(event.target.value) + 1
-    const id = parseInt(event.target.id)
-    const newComments = data.comments.map((comment) => comment.id === id ? {...comment, [name]: value} : comment)
-    setData({...data, comments: newComments})
+  useEffect(() => {
+    let id = currentUser.user_info.doctor.id
+    fetch(`/doctors/${id}`)
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((doctor) => {
+            setAnimals(doctor.animals)
+          })
+        } else {
+          res.json().then((errors) => setErrors([...errors, []]))
+        }
+      })
+  }, [])
+
+  const listAnimals = animals
+    .filter((animal) => animal.name.includes(searchTerm))
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'age old': return b.age - a.age
+        case 'age young': return a.age - b.age
+        case 'name': return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+        case 'dog': return a.classification === 'Dog' ? -1 : 1
+        case 'cat': return a.classification === 'Cat' ? -1 : 1
+        case 'bird': return a.classification === 'Bird' ? -1 : 1
+        case 'horse': return a.classification === 'Horse' ? -1 : 1
+        case '': return a.id - b.id
+        default: return true
+      }
+    })
+    .map((animal) => {
+      const { age,
+        breed,
+        classification,
+        color,
+        disposition,
+        existing_conditions,
+        id,
+        name,
+        notes,
+        sex
+      } = animal
+      return (
+        <React.Fragment key={animal.id}>
+          <Card sx={{ maxWidth: 400, margin: '2em' }}>
+          <CardContent>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Name: ${name}` }</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Breed: ${breed}` }</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Sex: ${sex}` }</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Disposition: ${disposition}` }</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Color: ${color}`}</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Classification: ${classification}`}</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Age: ${age}`}</Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Noted for patient ${id}: ${notes}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              { `Pre-exisiting conditions: ${existing_conditions}`}</Typography>
+          </CardContent>
+          </Card >
+        </React.Fragment>
+      )
+    })
+
+  function handleChange(e) {
+    setSearchTerm(e.target.value)
   }
 
-  const comments = data.comments
-  .filter((comment) => comment.user.includes(searchTerm) || comment.comment.includes(searchTerm))
-  .sort((a,b) => {
-    switch (sortBy) {
-      case 'Most upvotes' : return b.upvotes - a.upvotes
-      case 'Most downvotes' : return b.downvotes - a.downvotes
-      case 'User A-Z' : return a.user.toLowerCase() > b.user.toLowerCase() ? 1 : -1
-      case 'Comment A-Z' : return a.comment.toLowerCase() > b.comment.toLowerCase() ? 1 : -1
-      case '' : return a.id - b.id
-      default: return true
-    }
-  })
-  .map((comment) => {
-    return (
-      <React.Fragment key={comment.id}>
-        <strong >{comment.user}</strong>
-        <p>{comment.comment}</p>
-        <button 
-          onClick={handleClick} 
-          name='upvotes' 
-          value={comment.upvotes}
-          id={comment.id}
-        >{comment.upvotes} 👍</button>
-        <button 
-          onClick={handleClick} 
-          name='downvotes' 
-          value={comment.downvotes}
-          id={comment.id}
-        >{comment.downvotes} 👎</button>
-        <p></p>
-        <button
-          onClick={handleDelete}
-          name='delete'
-          value={comment.id}
-        >Delete This Comment</button>
-        <p></p>
-      </React.Fragment>
-    )
-  })
-
+  function handleSortChange(e) {
+    setSortBy(e.target.value)
+  }
 
   return (
-    <div>
-      <span>My Current Patients</span>
+    <div style={{ marginLeft: '20px' }}>
+      <label
+      > Search By Name:
+        <br></br>
+        {<input
+          style={{ maxWidth: '30%', marginBottom: '1em' }}
+          type='text'
+          placeholder='search for a patient...'
+          onChange={handleChange}
+          value={searchTerm}
+        ></input>}
+      </label>
+      <label>Filter By:</label>
+      <select value={sortBy} onChange={handleSortChange} style={{marginBottom: '1em'}}>
+        {sortOptions.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}>
+            {option.text}
+          </option>
+        ))}
+      </select>
+      {errors.map((error) => {
+        return <span key={error} className='error'>{error}</span>;
+      })}
+      <br></br>
+      <span >My Current Patients</span>
+      <br></br>
+      <div >{listAnimals}</div>
     </div>
   )
 }

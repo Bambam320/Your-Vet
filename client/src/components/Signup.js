@@ -14,6 +14,7 @@ function Signup() {
     return false
   }
 
+  console.log("signup is firing")
   // variables for the rest of the file
   const defaultDoctorValues = {
     username: '',
