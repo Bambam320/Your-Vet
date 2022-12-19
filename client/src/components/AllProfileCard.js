@@ -1,5 +1,6 @@
 //functional imports
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 //component imports
 import DoctorProfileCard from './DoctorProfileCard';
@@ -58,6 +59,7 @@ function AllProfileCard({ currentUser }) {
       {currentUser.role === 'doc' ?
         doctors : animals
       }
+      <Outlet/>
     </div>
   )
 }

@@ -32,7 +32,6 @@ const AppointmentForm = () => {
       .then((response) => {
         if (response.ok) {
           response.json().then((animals) => {
-            console.log("animals", animals)
             setAnimals(animals)});
         } else {
           response.json().then((err) => setErrors(err.errors));
@@ -89,7 +88,6 @@ const AppointmentForm = () => {
   });
 
 
-  console.log("formData from appointment form", formData)
   return (
     <div style={{ marginLeft: 'auto', marginRight: 'auto', maxWidth: '80%' }}>
       <form style={{ margin: 'auto' }}>

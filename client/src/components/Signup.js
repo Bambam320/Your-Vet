@@ -14,7 +14,6 @@ function Signup() {
     return false
   }
 
-  console.log("signup is firing")
   // variables for the rest of the file
   const defaultDoctorValues = {
     username: '',
@@ -137,8 +136,8 @@ function Signup() {
         onChange={handleToggleChange}
         aria-label="Platform"
       >
-        <ToggleButton value="doc" disabled={alignment === 'doc' ? true : false}>Doctor login</ToggleButton>
-        <ToggleButton value="pet" disabled={alignment === 'doc' ? false : true}>Pet login</ToggleButton>
+        <ToggleButton value="doc" disabled={alignment === 'doc' ? true : false}>Doctor signup</ToggleButton>
+        <ToggleButton value="pet" disabled={alignment === 'doc' ? false : true}>Pet signup</ToggleButton>
       </ToggleButtonGroup>
       <h2 style={{marginTop: "20px"}}>{alignment ==='doc' ? "Welcome Doctor" : "Woof, Meow, Chirp and Whinny!"}</h2>
       {displayForm}

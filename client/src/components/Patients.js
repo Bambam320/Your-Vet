@@ -39,7 +39,7 @@ function Patients() {
   }, [])
 
   const listAnimals = animals
-    .filter((animal) => animal.name.includes(searchTerm))
+    .filter((animal) => animal.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
       switch (sortBy) {
         case 'age old': return b.age - a.age
@@ -95,6 +95,7 @@ function Patients() {
 
   function handleChange(e) {
     setSearchTerm(e.target.value)
+    console.log("e from appointmentform", e.target.value)
   }
 
   function handleSortChange(e) {
