@@ -61,7 +61,7 @@ function App() {
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
           <Route index element={<Home />} />
           <Route path="login" element={<Login onLogin={setCurrentUser} />} />
-          <Route path="appointments/" element={<Appointments />} >
+          <Route path="appointments/" element={<Appointments currentUser={currentUser} />} >
             <Route path="new" element={<AppointmentForm />} />
           </Route>
           <Route path="users/" element={<AllProfileCard currentUser={currentUser} />} >

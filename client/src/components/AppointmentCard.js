@@ -23,6 +23,7 @@ function AppointmentCard({ appointment }) {
     setUpdateToggle(!updateToggle);
   }
 
+
   const {
     doctor: {
       address = "default address",
@@ -38,14 +39,16 @@ function AppointmentCard({ appointment }) {
       age,
       notes
     },
+    id,
     time,
     location,
-    concern
+    concern,
+    diagnosis
   } = appointment
 
   function handleDeleteClick(e) {
     e.preventDefault();
-    fetch(`/appointments/${appointment.id}`, {
+    fetch(`/appointments/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -53,12 +56,12 @@ function AppointmentCard({ appointment }) {
       body: JSON.stringify(),
     }).then((res) => {
       if (res.ok) {
-        res.json().then((appointment) => {
-          const newAppointments = appointments.filter((app) => app.id !== appointment.id);
+          const newAppointments = appointments.filter((app) => app.id !== id);
           setAppointments(newAppointments);
-        });
       } else {
-        return res.json().then((err) => setErrors(err.error));
+        res.json().then((err) => {
+          console.log("error", err)
+          setErrors(err.errors)});
       }
     });
   }
@@ -88,6 +91,8 @@ function AppointmentCard({ appointment }) {
           {`Located at ${location}.`}</Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {` Patient concern: ${concern}`}</Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {` Patient diagnosis: ${diagnosis}`}</Typography>
       </CardContent>
       <CardActions>
         <Button variant="contained" size="small" onClick={onUpdateToggle}>Update This appointment!</Button>

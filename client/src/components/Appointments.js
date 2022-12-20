@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 
-function Appointments() {
+function Appointments({ currentUser }) {
   const [errors, setErrors] = useState([])
   const { appointments, setAppointments } = useContext(LoggedUserContext);
 
@@ -30,19 +30,20 @@ function Appointments() {
 
   return (
     <div className='project-list'>
-        <Button 
+      {currentUser.role === 'doc' ? 
+        <Button
           component={Link}
           to="/appointments/new"
-          variant="contained" 
-          sx={{ 
+          variant="contained"
+          sx={{
             marginLeft: '3em',
             marginTop: '-5em'
           }}
         >
           Create new Appointment
           <input hidden accept="image/*" multiple type="file" />
-        </Button>
-        <Outlet/>
+        </Button> : <></> }
+      <Outlet />
       <section>
         {appointments.map((appointment) => (
           <AppointmentCard key={appointment.id} appointment={appointment} />

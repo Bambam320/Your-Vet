@@ -61,7 +61,7 @@ const Login = ({ onLogin }) => {
   return (
     <form onSubmit={handleSubmit} className='auth-form'>
       <h2>Login</h2>
-      <FormControl>
+      {/* <FormControl>
         <RadioGroup
           style={{marginBottom: '-40px'}}
           name="role"
@@ -82,7 +82,7 @@ const Login = ({ onLogin }) => {
             label="Pet"
           />
         </RadioGroup>
-      </FormControl>
+      </FormControl> */}
       <label>
         <span>username:</span>
         <input

@@ -24,7 +24,9 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
     }).then((res) => {
       if (res.ok) {
         res.json().then((updatedAppointment) => {
+          console.log("updated appointment", updatedAppointment)
           const updatedAppointments = appointments.map((app) => {
+            console.log("app", app)
             if (app.id === updatedAppointment.id) {
               return updatedAppointment
             } else {
@@ -34,7 +36,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
           setAppointments(updatedAppointments)
         })
       } else {
-        res.json().then((err) => setErrors(err.error));
+        res.json().then((err) => setErrors(err.errors));
       }
     });
     changeToggle()
@@ -79,7 +81,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
             value={form.diagnosis}
           ></textarea>
         </label>
-        <button className='btn'>Update Review</button>
+        <button className='btn'>Update Appointment</button>
         <button className='btn' onClick={handleCancel}>Cancel</button>
       </form>
     </>
