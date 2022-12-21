@@ -29,9 +29,11 @@ class UsersController < ApplicationController
       ).permit!
       user = animal.create_user!(permitted_user_params)
       session[:user_id] = user.id
-      render json: user, status: :created
+      render json: user, include: ['doctors', 'doctors.appointments' ], status: :created
       end
     end
+  
+
 
     def show
       render User.find(session[:user_id]), status: :ok

@@ -54,6 +54,8 @@ function App() {
     setCurrentUser(user)
   }
 
+  console.log(currentUser)
+
   //provides context to and route to entire app
   return (
     <LoggedUserContext.Provider value={{ currentUser, setCurrentUser, appointments, setAppointments }}>
