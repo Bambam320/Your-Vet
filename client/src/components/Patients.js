@@ -23,19 +23,9 @@ function Patients() {
   const [errors, setErrors] = useState([]);
   const [sortBy, setSortBy] = useState(sortOptions[0].value);
   const [searchTerm, setSearchTerm] = useState('')
-
+console.log(currentUser)
   useEffect(() => {
-    let id = currentUser.user_info.doctor.id
-    fetch(`/doctors/${id}`)
-      .then((res) => {
-        if (res.ok) {
-          res.json().then((doctor) => {
-            setAnimals(doctor.animals)
-          })
-        } else {
-          res.json().then((errors) => setErrors([...errors, []]))
-        }
-      })
+    setAnimals(currentUser.user_info.doctor.animals)
   }, [])
 
   const listAnimals = animals

@@ -49,12 +49,15 @@ function App() {
       })
   }
 
-  // sets current user with the valid login return object
-  function onLogin(user) {
-    setCurrentUser(user)
-  }
+console.log(currentUser)
 
-  console.log(currentUser)
+  useEffect(() => {
+    currentUser.user_info_type === 'Doctor' 
+      ? 
+        setAppointments(currentUser.user_info.doctor.appointments)
+      :
+        setAppointments(currentUser.user_info.animal.appointments)
+    }, [])
 
   //provides context to and route to entire app
   return (
@@ -62,7 +65,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
           <Route index element={<Home />} />
-          <Route path="login" element={<Login onLogin={setCurrentUser} />} />
+          <Route path="login" element={<Login />} />
           <Route path="appointments/" element={<Appointments currentUser={currentUser} />} >
             <Route path="new" element={<AppointmentForm />} />
           </Route>

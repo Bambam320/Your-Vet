@@ -11,23 +11,9 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 
-function Appointments({ currentUser }) {
-  const [errors, setErrors] = useState([])
-  const { appointments, setAppointments } = useContext(LoggedUserContext);
-
-  useEffect(() => {
-    fetch('/appointments')
-      .then((res) => {
-        if (res.ok) {
-          res.json().then((appointments) => {
-            setAppointments(appointments)
-          });
-        } else {
-          res.json().then((err) => setErrors(err.error));
-        }
-      });
-  }, [])
-
+function Appointments() {
+  const { currentUser, appointments } = useContext(LoggedUserContext);
+console.log(appointments)
   return (
     <div className='project-list'>
       {currentUser.role === 'doc' ? 

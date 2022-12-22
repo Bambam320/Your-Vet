@@ -23,28 +23,17 @@ function AppointmentCard({ appointment }) {
     setUpdateToggle(!updateToggle);
   }
 
-
+console.log("appointment from appointment card", appointment)
+  
   const {
-    doctor: {
-      address = "default address",
-      name: doctorName,
-      phone_number,
-      specialty,
-    },
-    animal: {
-      name: animalName,
-      sex,
-      color,
-      breed,
-      age,
-      notes
-    },
     id,
     time,
     location,
     concern,
     diagnosis
   } = appointment
+  let animalName = currentUser.user_info.doctor.animals.find((animal) => animal.id === appointment.animal_id).name
+  let doctorName = currentUser.user_info.doctor.name
 
   function handleDeleteClick(e) {
     e.preventDefault();

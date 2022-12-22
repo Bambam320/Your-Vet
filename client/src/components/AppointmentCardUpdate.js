@@ -13,7 +13,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
   }
   console.log(appointment)
 
-  function handleSubmit(e) {
+  function handleUpdateSubmit(e) {
     e.preventDefault()
     fetch(`/appointments/${appointment.id}`, {
       method: "PATCH",
@@ -50,7 +50,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
   return (
     <>
       <div>{`Change the details of your appointment with ${appointment.doctor.name}`}</div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleUpdateSubmit}>
         <label>
           <span>Update the time:</span>
           <textarea

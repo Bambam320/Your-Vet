@@ -1,19 +1,13 @@
 //functional imports
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoggedUserContext } from "./LoggedUserContext";
 
 //component and other file imports
 import '../login.css';
 
-//material imports
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-
 // from App
-const Login = ({ onLogin }) => {
+const Login = () => {
   // Providing state for login form and errors from backend and navigate from router dom
   const [form, setForm] = useState({
     username: '',
@@ -21,6 +15,7 @@ const Login = ({ onLogin }) => {
     role: 'Doctor',
   })
   const [errors, setErrors] = useState([]);
+  const { setCurrentUser } = useContext(LoggedUserContext)
   const navigate = useNavigate();
 
   // controls the login form values
@@ -44,7 +39,7 @@ const Login = ({ onLogin }) => {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          onLogin(user)
+          setCurrentUser(user)
           setTimeout(navigate("/appointments"), 500)
         });
       } else {

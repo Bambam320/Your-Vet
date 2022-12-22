@@ -27,21 +27,11 @@ function AnimalProfileCard({ animal }) {
     <React.Fragment>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Username: ${username}`}</Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Animal tracker Id: ${id}`}</Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {`Name: ${name}`}</Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Sex: ${sex}`}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {`Breed: ${breed}`}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {`Color: ${color}`}</Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Age: ${age}`}</Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Disposition: ${disposition}`}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {`Classification: ${classification}`}</Typography>
       </CardContent>

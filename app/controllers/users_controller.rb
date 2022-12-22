@@ -5,8 +5,9 @@ class UsersController < ApplicationController
   
     #Users#all
     def index
-      type_of = User.find(session[:user_id]).role
-      users = User.all.where(role: type_of)
+      user = User.find(session[:user_id])
+      type_of = user.role
+      users = User.all.where(role: type_of).where.not('id = ?', user.id)
       render json: users, status: :ok
     end
 
@@ -20,7 +21,7 @@ class UsersController < ApplicationController
       ).permit!
       user = doctor.create_user!(permitted_user_params)
       session[:user_id] = user.id
-      render json: user, status: :created
+      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
     elsif params[:role] == 'pet'
       permitted_animal_params = params.extract!(:name, :sex, :breed, :color, :existing_conditions, :age, :disposition, :classification).permit!
       animal = Animal.create!(permitted_animal_params)
@@ -29,7 +30,7 @@ class UsersController < ApplicationController
       ).permit!
       user = animal.create_user!(permitted_user_params)
       session[:user_id] = user.id
-      render json: user, include: ['doctors', 'doctors.appointments' ], status: :created
+      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
       end
     end
   

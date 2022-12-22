@@ -26,15 +26,9 @@ function DoctorProfileCard({ doctor }) {
     <React.Fragment>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Username: ${username}`}</Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Company Id: ${id}`}</Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {name}</Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {`Specialization: ${specialty}`}</Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {degree}</Typography>
+          {`Specializes in ${specialty}s`}</Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {address}</Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
