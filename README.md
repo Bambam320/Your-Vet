@@ -12,13 +12,9 @@ This is a single-page application that allows a doctor or a patient to login. Th
 
 - [Usage](#usage)
 
-- [Description](#Description)
-
 - [Instructional-GIF](#Instructional-GIF)
 
 - [Video-Describing-Functionality](#Video-Describing-Functionality)
-
-- [Credits](#Credits)
 
 - [License](#License)
 
@@ -101,522 +97,144 @@ Each character in the schema has many spells and each spell belongs to a single 
 
 ![](images/Signup.png  "Sign Up Page Example")
 
-The Home component renders via the link ```<Home>``` from the NavBar, the other components shown here are the ```<Background>``` and ```<NavBar>``` components. They are shown on every single page and are available to all components.
+The SignUp component renders provides a form that is provided by rendering a controlled input from each key in the object form. That data is sent to the back end and automatically used to create either a doctor or animal with an associated user.
 ```
-Index from the src folder
-└── App from component folder
-  ├── Background
-  ├── NavBar
-  ├── Home   
+  ├── Signup  
 ```
 
-The ```<App>``` component provides routes to all the other main components in the app. The default path at ```"/"``` will display the NavBar component and unless there is a path after the default path, then the Home component will be rendered as well. The ```<App>``` will provide routes to all components and provides context to all components for the state of all characters, spells and the chosen opponent and fighter. It holds to effect functions that get all characters and all spells and set state with them. The fighter and opponent states are filled with default values until they are set with characters from other components.
-
-```js
-  //provides context for state declared above to all components and creates routes to match links that render the correct components
-  return (
-    <LoggedContext.Provider value={{ opponent, setOpponent, myFighter, setMyFighter, characters, setCharacters, spells, setSpells }}>
-      <Background />
-      <Routes>
-        <Route path="/" element={<NavBar />}>
-          <Route index element={<Home />} />
-          <Route path="characters/" element={<Characters />} >
-            <Route path=":id/spells" element={<CharacterSpells />} />
-            <Route path=":id/edit" element={<UpdateCharacter />} />
-          </Route>
-          <Route path="spells/" element={<Spells />} />
-          <Route path="characters/new" element={<CreateACharacter />} />
-          <Route path="characters/fight" element={<Fight />} />
-        </Route>
-      </Routes>
-    </LoggedContext.Provider>
-  )
-};
-```
-
-The backend receives the ```GET``` requests and returns all spells as they are. The Get request calls the ```create_me_a_character_hash_with_spells``` which updates the characters ```attack_points``` and ```spell_points```, then poises all the characters including their spells as a ```JSON``` and returns it to the characters ```GET``` request and returns it back to the front end in ```JSON``` format.
-```rb
-  get '/characters' do
-    characters = Character.create_me_a_character_hash_with_spells
-    characters.to_json
-  end
-
-  get '/spells' do
-    spells = Spell.all
-    spells.to_json
-  end
-  
-    def self.create_me_a_character_hash_with_spells
-    all_characters = Character.all
-    all_characters.each{ |char| char.update(attack_points: char.level * char.attack_points)}
-    all_characters.each{ |char| char.update(spell_points: char.spells.map{ |spell| spell["level"] * spell["damage"] * spell["description"].length/8 }.reduce(:+))}
-    character_json = all_characters.as_json(include: :spells)
-    character_json
-  end
-```
-The Background component loads the background image and the title at the top of the page.
-
-```js
-  // sets the style of the background image
-  const backgroundStyle = {
-    backgroundImage: `url(${image})`,
-    height: '100vh',
-    width: '100vw',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-  };
-
-  // returns the background image and a title that lives on every component of this SPA
-  return (
-    <div style={backgroundStyle}>
-      <Container maxWidth={false} >
-        <Typography className='gradient-text' variant='h3' style={{ fontWeight: '800', textAlign: 'center', marginBottom: '25px' }}>
-          Dungeon & Dragons Battle Arena
-        </Typography>
-      </Container>
-    </div>
-  )
-};
-```
-The ```<NavBar>``` component provides all the links for this SPA. It lists the currently selected fighter and opponent through the following example. The ```validFighter``` boolean lists the information about the selected fighter or lets the user know that now fighter has been selected. 
-
-```js
-        <List>
-          {/* a ternary operator checks if there is a fighter selected and presents that information but if no fighter is selected, it says as much. */}
-          <ListItem>
-            <p className='characterFont'>{validFighter ?
-              `Your champion: ${myFighter.card.name} has ${fighterHitPoints()} hit points` :
-              `No champion has been selected`}
-            </p>
-          </ListItem>
-          {/* A ternary operator to display the button based on a fighter being selected or not */}
-          {validFighter ?
-            <Button
-              onClick={() => handleDeselect('champion')}
-              style={{
-                marginTop: '5px',
-                borderRadius: 5,
-                backgroundColor: "#ea2424",
-                color: "white",
-                padding: "10px 20px",
-                fontSize: "11px",
-                fontWeight: "bold"
-              }}
-            > Deselect Champion </Button> : <></>}
-        </List>
-```
-
-***Characters page***
-
-![](images/Characters.png  "Characters Page Example")
-
-The Characters branch of the app.
-```
-  ├── Characters
-  |   └── CharacterCards
-  |   └── CharacterSpells
-  |   └── UpdateCharacter
-```
-The Character branch of the app renders its child ```<CharacterCards>``` and provides each character held in state. It also handles the delete from the delete button from its child, ```<CharacterCards>```.
-
-```js
-  // function is passed back as props from CharacterCards, this updates the characters held in state to remove the user requested deleted character, then navigates
-  // back to characters
-  function handleDeleteCharacter(id) {
-    const newCharacters = characters.filter((character) => character.id != id)
-    setCharacters(newCharacters)
-    navigate('/characters')
-  }
-
-  // lists a card for each character held in state, it passes card which represents each character and passes the delete function as props
-  const listCharacters = characters.map((singleCharacter) => {
-    return (
-      <React.Fragment key={singleCharacter.id} >
-        <Grid item={4}>
-          <Charactercards card={singleCharacter} onDeleteCharacter={handleDeleteCharacter} />
-        </Grid>
-      </React.Fragment>
-    )
-  })
-
-  // returns a container and grid for spacing then calls listCharacters to render a component for each card
-  return (
-    <>
-      <Container style={{ margin: '-600px', marginLeft: 'auto', marginRight: 'auto' }}>
-        <Grid container spacing={10} justifyContent="space-evenly" columnspacing={10}>
-          {listCharacters}
-        </Grid>
-      </Container>
-      <Outlet />
-    </>
-  )
-};
-```
-
-The ```CharacterCards``` component takes each character from the ```<Character>``` component and lists all the pertinent attributes from the character's information; it also provides 5 buttons. The first is the entire card, which when clicked will link to the child ```<CharacterSpells>``` which displays all of the spells associated with the character. It is a nested link which renders from the app.
-
-```js
-///CharacterCards
-<CardActionArea component={Link} to={`/characters/${char_id}/spells`}>
-```
-
-The next two buttons include the "Set As My Character" and "Set as Opponent" which take the current character and save them to the ```myFighter``` and ```opponent``` states to be used by other components such as ```<Fight>``` and ```<Spells>```.
-
-```js
-          <Button onClick={handleAddMainFighter} style={{ borderRadius: 5, backgroundColor: "#21b6ae", color: "white", padding: "10px 20px", fontSize: "11px", fontWeight: "bold", marginTop: "10px", marginBottom: "20px" }}>
-            Set As My Character
-          </Button>
-          <Button onClick={handleAddOpponentFighter} style={{ borderRadius: 5, backgroundColor: "#21b6ae", color: "white", padding: "10px 20px", fontSize: "11px", fontWeight: "bold", marginBottom: "20px" }}>
-            Set As Opponent
-          </Button>
-```
-
-The fourth button is the ```deleteCharacter``` button which fires the ```handleDeleteCharacter``` function that sends a ```DELETE``` request to the backend. The character of the id is then passed as a prop to the onDeleteCharacter function which updates state in the ```<Character>``` component. 
-
-```js
-          <Button onClick={handleDeleteCharacter} style={{ borderRadius: 5, backgroundColor: "#21b6ae", color: "white", padding: "10px 20px", fontSize: "11px", fontWeight: "bold", marginBottom: "20px" }}>
-            Delete This Character
-          </Button>
-          
-          // fetches a delete url from sinatra to delete a character from the database, the returned JSON is not used and the onDeleteCharacter function is called
-          function handleDeleteCharacter(e) {
-            e.preventDefault()
-            fetch(`http://localhost:9292/characters/${char_id}`, {
-              method: "DELETE",
-            });
-            onDeleteCharacter(char_id)
-          }
-```
-The fetch method to the backend is a ```DELETE``` action which destroys the character by finding it by its id.
-```rb
-  delete '/characters/:char_id' do
-    character = Character.find(params[:char_id])
-    character.destroy
-  end
-```
-
-The last button is the "Update This Character" button which is a link that renders ```<UpdateCharacter>```. That provides a form to update the character and passes the character's id as a prop.
-
-```js
-      <Button component={Link} to={`/characters/${char_id}/edit`} style={{ borderRadius: 5, backgroundColor: "#21b6ae", color: "white", padding: "10px 20px", fontSize: "11px", fontWeight: "bold" }}>
-        Update This Character
-      </Button>
-```
-
-The update character component uses a submit function to provide a ```PATCH``` request to the backend, the entire character is sent which holds the selected character in a controlled form updated as a user enters information into the fields. The returned character is used to update all the characters held in state, and the currently selected fighter. It also updates the characters spell points.
-
-```js
-  function handleSubmit(e) {
-    e.preventDefault();
-    let server = `http://localhost:9292/characters/${char_id}`
-    const patch = {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(character)
-    }
-    fetch(server, patch)
-      .then((r) => r.json())
-      .then((patchedCharacter) => {
-        const updatedCharacter = { ...patchedCharacter }
-        updatedCharacter.spell_points = patchedCharacter.spells.reduce((acc, val) => {
-          return acc += val.level * val.damage * val.description.length / 8
-        }, 0)
-        updatedCharacter.attack_points = updatedCharacter.level * updatedCharacter.attack_points
-        setMyFighter({ card: updatedCharacter })
-        let updatedCharacters = characters.map((eachCharacter) => {
-          if (eachCharacter.id === patchedCharacter.id) {
-            return updatedCharacter
-          } else {
-            return eachCharacter
-          }
-        });
-        setCharacters(updatedCharacters)
-      });
-  }
-```
-The backend receives the updated attributes through parameters, finds the character by its ```[:char_id]``` and uses active record to update those new parameters. The returned character includes all spells in that character.
-```rb
-  patch '/characters/:char_id' do
-    character = Character.find(params[:char_id])
-    character.update(
-      name: params[:name],
-      pet: params[:pet],
-      level: params[:level],
-      city: params[:city],
-      avatar_url: params[:avatar_url],
-      language: params[:language]
-    )
-    character.to_json(include: :spells)
-  end
-```
-
-***Create A Character page***
-
-![](images/Create_A_Character.png  "Create A Character Example")
-
-The Create a Character component.
-```
-  ├── CreateACharacter
-```
-The ```<CreateACharacter>``` component renders a small form with 6 inputs that allow the user to input character attributes including, name and level. Level is actually used in computing a character's hit points. The ```handleSubmit``` function provides a ```POST``` request to the backend and has the new character returned. It then adds it to state holding all characters. Then it resets the form values and navigates back to characters after 2 seconds.
-
-```js
-  // a post request to active record with the formValues for the new character returns the new character from the database and adds to current state for characters
-  function handleSubmit(e) {
-    e.preventDefault();
-    const server = 'http://localhost:9292/characters'
-    const post = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues)
-    }
-    fetch(server, post)
-      .then((r) => r.json())
-      .then((returnedCharacter) => {
-        setCharacters([...characters, returnedCharacter])
-        setFormValues(defaultValues)
-        setTimeout(navigate('/characters'), 2000)
-      });
-  };
-```
-
-The back end receives the request and sends the params to ```create_me_a_brand_new_character``` which uses the ```Faker``` ruby gem to fill all the other data for the character. This includes the weapons and other DnD terminology. It also adds a couple of spells and calculates both the characters ```attack_points``` and ```spell_points```. This is used in determining a winner for the fight. It returns the new character in ```JSON``` format. 
+The ```<SignUp>``` component provides an object that is defaulted to either a form for doctors or animals to sign up. That form is controlled and submitted to the back end for creating a user and an associated doctor or animal. The create action below, determines if the parameters are meant for a doctor, then extract and permit only those that a doctor needs. Those params are used to create a new doctor which will then be used to create a new user by association. That user is returned with the appropriately provided information, where a doctor will be sent with the associated animals and vice versa.
 
 ```rb
-  post '/characters' do 
-    new_character = Character.create_me_a_brand_new_character(params)
-    new_character.to_json
-  end
-  
-    def self.create_me_a_brand_new_character params
-    level = params[:level]
-    melee_weapon = Faker::Games::DnD.melee_weapon
-    melee_weapon_source = RestClient.get "https://www.dnd5eapi.co/api/equipment/#{melee_weapon.downcase.gsub(" ", "-")}"
-    melee_weapon_json = JSON.parse(melee_weapon_source)
-    melee_weapon_power = melee_weapon_json["range"].values[0] * melee_weapon_json["weight"]
-    ranged_weapon_location = Faker::Games::DnD.ranged_weapon
-    ranged_weapon = ranged_weapon_location == "Crossbow" || ranged_weapon_location == "Boomerang" ? "Blowgun" : ranged_weapon_location
-    ranged_weapon_source = RestClient.get "https://www.dnd5eapi.co/api/equipment/#{ranged_weapon.downcase.gsub(" ", "-")}"
-    ranged_weapon_json = JSON.parse(ranged_weapon_source)
-    ranged_weapon_power = ranged_weapon_json["range"].values[1] * ranged_weapon_json["weight"]
-    new_character = Character.create(
-      name: params[:name],
-      alignment: Faker::Games::DnD.alignment,
-      background: Faker::Games::DnD.background,
-      city: params[:city],
-      c_lass: Faker::Games::DnD.klass,
-      language: params[:language],
-      melee_weapon: melee_weapon,
-      pet: params[:pet],
-      race: Faker::Games::DnD.race,
-      ranged_weapon: ranged_weapon,
-      level: level,
-      attack_points: ranged_weapon_power * melee_weapon_power * level.to_i,
-      spell_points: 0,
-      avatar_url: params[:avatar_url],
-    )
-    new_character.spells << Spell.find(1)
-    new_character.spells << Spell.find(2)
-    new_character.update(spell_points: new_character.spells.map{ |spell| spell["level"] * spell["damage"] * spell["description"].length/8 }.reduce(:+))
-    new_character
-  end
-```
-
-***Spells page***
-
-![](images/Spells.png  "Spells Page Example")
-
-The Spells page of the app.
-```
-	├── Spells
-```
-
-The ```<Spells>``` component offers a lot of functionality. It will process a ```POST``` to spells without adding it to a character. It will ```POST``` a spell to the spells table while adding it to a character. It will also ```PATCH``` a character with a spell selected from existing spells, provided from the state held spells.
-
-The ```handleSubmit``` function below creates variables holding the ```PATCH``` or ```POST``` objects, server URLs and the switch statement and ternary operator selects which to use based on user input. If the form is used, the ```POST``` will be fired, if the existing spell is selected, the ```PATCH``` is fired. Also, the user can select to add a spell to a character. The returned spell is then added to spells held in state or updates the champion and characters state by adding the spell to the character selected.
-
-```js
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    // Variables for the selected character, post and patch server address
-    let char_id = myFighter.card.id
-    const postToSpellsServer = `http://localhost:9292/spells`
-    const postToCharServer = `http://localhost:9292/spells/${char_id}/characters`
-    const patchServer = `http://localhost:9292/characters/${char_id}/spells`
-
-    // definitions for post and patch objects
-    const post = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues)
-    }
-    const patch = {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(chosenSpell)
-    }
-
-    // ternary that will always post the fetch unless the user has been selected to add a character and some information exists in the create a spell form
-    // switch statement that will provide the correct RESTful url depending on whether its a post with or without a character or a patch
-    let postOrPatch = addToCharacter && !select ? patch : post
-    let server = ''
-    switch (true) {
-      case addToCharacter && !select:
-        server = patchServer;
-        break;
-      case addToCharacter && !textField:
-        server = postToCharServer;
-        break;
-      default:
-        server = postToSpellsServer;
-    }
-
-    // function for updating the spell power of the updated character and setting the my fighter state with it
-    function updateTheCharacter(character, spell) {
-      const updatedCharacter = { ...character, spells: [...character.spells, spell] }
-      updatedCharacter.spell_points = character.spells.reduce((acc, val) => {
-        return acc += val.level * val.damage * val.description.length / 8
-      }, 0)
-      setMyFighter({ card: updatedCharacter })
-      return updatedCharacter
-    }
-
-    // The address and object are filled in based on logic
-    fetch(server, postOrPatch)
-      .then((r) => r.json())
-      .then((spell) => {
-
-        // the patch returns the spell and it updates characters along with updating the spell_points by reducing the new values from the spells array
-        if (addToCharacter && !select) {
-          let updatedCharacters = characters.map((character) => {
-            if (character.id === spell.character_id) {
-              return updateTheCharacter(character, spell)
-            } else {
-              return character
-            }
-          })
-          setCharacters(updatedCharacters)
-
-          // the post returns the spell and it updates the state held spells, resets formValues and updates characters, using the updateTheCharacter function
-          // it updates the spell power of the updated character
-        } else if (addToCharacter && select) {
-          setSpells([...spells, spell])
-          setFormValues(defaultValues)
-          let updatedCharacters = characters.map((character) => {
-            if (character.id === char_id) {
-              return updateTheCharacter(character, spell)
-            } else {
-              return character
-            }
-          })
-          setCharacters(updatedCharacters)
-
-          // posts a new spell to the database from the form provided on the page
-        } else {
-          setSpells([...spells, spell])
-          setFormValues(defaultValues)
-        }
-      });
-  };
-```
-
-The backend will receive the spell parameters for the ```POST``` requests and call the ```create_me_a_spell``` method from the Spell model which returns the newly recorded spell after its attributes have been added to the database including the ```character_id``` which is set from the champion selected in the front end as required.
-
-```rb
-  post '/spells' do
-    created_spell = Spell.create_me_a_spell(params)
-    created_spell.to_json
-  end
-  
-    def self.create_me_a_spell params
-    if params[:char_id].to_i == 0
-      params[:character_id] = nil
-    else
-      params[:character_id] = params[:char_id]
+  def create
+    if params[:role] == 'doc'
+    permitted_doctor_params = params.extract!(:phone_number, :name, :address, :degree, :logo, :university, :specialty).permit!
+    doctor = Doctor.create!(permitted_doctor_params)
+    permitted_user_params = params.extract!(
+      :username, :password, :password_confirmation, :role
+    ).permit!
+    user = doctor.create_user!(permitted_user_params)
+    session[:user_id] = user.id
+    render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
+  elsif params[:role] == 'pet'
+    permitted_animal_params = params.extract!(:name, :sex, :breed, :color, :existing_conditions, :age, :disposition, :classification).permit!
+    animal = Animal.create!(permitted_animal_params)
+    permitted_user_params = params.extract!(
+      :username, :password, :password_confirmation, :role
+    ).permit!
+    user = animal.create_user!(permitted_user_params)
+    session[:user_id] = user.id
+    render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: 201
     end
-    puts 'from spell.rb params', params
-    new_spell = Spell.create(
-      name: params[:name],
-      description: params[:description],
-      range: params[:range],
-      material: params[:material],
-      duration: params[:duration],
-      casting_time: params[:casting_time],
-      level: params[:level],
-      damage: params[:damage],
-      character_id: params[:character_id]
-    )
-    new_spell
   end
 ```
-The ```POST``` for a new spell added to a character finds that character and adds the new spell as an association to that character.
+***Appointments Pages***
 
-The ```PATCH``` adds an existing spell to a character by adding that character's id to the spells table as aa foreign key.
+![](images/Appointments.png  "Appointment Page Example")
+
+The appointments pages provide functionality to render, create, update and delete appointments.
+
+```
+  ├── Appointments
+  |   └── AppointmentCard
+  |       └── AppointmentCardUpdate
+```
+The Appointments Controller is fairly straightforward It provides actions to view all, create, update or delete an appointment. 
 
 ```rb
-  # This post to the spells table will create a spell and attach it to the provided character id by association
-  # This returns the newly created spell back to the frontend
-  post '/spells/:char_id/characters' do
-    character = Character.find(params[:char_id])
-    created_spell = Spell.create_me_a_spell(params)
-    created_spell.to_json 
+# Appointments Controller
+  #returns all appointments
+  def index
+    render json: Appointment.all, status: :ok
   end
 
-  # finds the character provided by react and shovels the existing spell into that characters spells array and returns the new spell including the
-  # character id
-  patch '/characters/:char_id/spells' do
-    character = Character.find(params[:char_id])
-    spell = Spell.find(params[:id])
-    character.spells << spell
-    spell.to_json
+  # creates an appointment and returns it if valid
+  def create
+    appointment = Appointment.create!(appointment_params)
+    if appointment
+      render json: appointment, status: :created
+    end
+  end
+
+  # updates an appointment and returns it if valid
+  def update
+    if find_appointment.update!(appointment_params)
+      render json: find_appointment, status: :ok
+    end
+  end
+
+  #destroys the appointment provided and returns an empty object
+  def destroy
+    find_appointment.destroy
+    render json: {}, status: :accepted
   end
 ```
+The create, update, and destroy actions are protected from unauthorized users with the following private authorization methods.
 
-***Fight page***
+```rb
+  #authorizes a user for actions pertaining only to that user
+  def authorize_user
+    return render json: { errors: ["Not authorized"] }, status: :unauthorized unless session[:user_id] == find_appointment.doctor.user.id || session[:user_id] == find_appointment.animal.user.id
+  end
 
-![](images/Fight.png  "Fight Page Example")
-
-The Fight page of the app.
+  #authorizes a user to be logged in before allowing the action
+  def authorize_general
+    return render json:{errors: ["not authorized"]}, status: :unauthorized unless session.include? :user_id
+  end
 ```
-	├── Fight
+![](images/AppointmentCreate.png  "Appointment Page Example")
+
+The animals index action provides all users when requested by an animal. If the request comes from a doctor, then the animals will be provided to the frontend with the animals that already have an association with the logged in doctor filtered out. 
+
+```rb
+  # sends only those animals that do not currently have an appointment with the logged in doctor
+  def index
+    user = User.find(session[:user_id])
+    if user.user_info_type == 'Doctor'
+      animals_with_set_appointments = Appointment.where('doctor_id = ?', user.user_info_id).map { |apps| apps.animal_id }
+      animals_with_set_appointments.length > 0 ? nil : animals_with_set_appointments = [0]
+      render json: Animal.where.not("id IN (?)", animals_with_set_appointments).order(:name), status: :ok
+      # otherwise all animals are sent
+    else
+      render json: Animal.all, status: :ok
+    end
+  end
+
 ```
-The ```<Fight>``` component renders a couple of cards for each fighter and opponent and offers a "Fight" and "Reset" button which puts the selected challengers against each other and offers a victor in the form of a gif depicting a winner or a loser. Below is the ```handleFight``` function which determines the winner and changes that characters ```avatar_url``` attribute to a gif.
-```js
-  function handleFight(e) {
-    e.preventDefault()
-    if (((champion.card.spell_points + champion.card.attack_points) * Math.random()) > ((opponent.card.spell_points + opponent.card.attack_points) * Math.random())) {
-      setChampion({ ...champion, card: { ...champion.card, avatar_url: "https://media.tenor.com/BA4S2y58lbEAAAAS/chris-farley-academy-awards.gif" } })
-      setChallenger({ ...challenger, card: { ...challenger.card, avatar_url: "https://media.tenor.com/eTqdoJ96YP4AAAAM/failure-fail.gif" } })
-    } else {
-      setChampion({ ...champion, card: { ...champion.card, avatar_url: "https://media.tenor.com/eTqdoJ96YP4AAAAM/failure-fail.gif" } })
-      setChallenger({ ...challenger, card: { ...challenger.card, avatar_url: "https://media.tenor.com/BA4S2y58lbEAAAAS/chris-farley-academy-awards.gif" } })
-    }
-  }
+The associations are created in the model files as described below. The ```Appointments``` model uses a join table between ```Doctors``` and ```Animals``` where it holds the primary key of each model as its foreign key. The The doctor and animal each may have many appointments and the appointment belongs to a doctor and to an animal. The ```User``` model uses a has_one / belongs_to relationship with a doctor and an animal. The doctor and animal model each have a ```has_one :user, as: :user_info``` where each can hold a record in the ```users``` table stored as user_info. This is allowed through the polymorphic option set to true.
+```rb
+class Animal < ApplicationRecord
+  # has a user names as user_info which is shared with the doctor model
+  has_one :user, as: :user_info
+  # has many appointments and doctors
+  has_many :appointments
+  has_many :doctors, through: :appointments
+end
+
+class User < ApplicationRecord
+  #validates the username to be unique between animals and doctors
+  validates :username, presence: true, uniqueness: true
+  #has a secure password from bcrypt
+  has_secure_password
+  #belongs to the user_info index in user which can store animals or doctors using the polymorphic option
+  belongs_to :user_info, polymorphic: true
+end
+
+class Doctor < ApplicationRecord
+  # validates some attributes
+  validates :name, :address, presence: true, uniqueness: true
+  # has a user names as user_info which is shared with the doctor model
+  has_one :user, as: :user_info
+  #has many appointments and animals
+  has_many :appointments
+  has_many :animals, through: :appointments
+end
+
+class Appointment < ApplicationRecord
+  #each appointment belongs to a doctor and an animal
+  belongs_to :doctor
+  belongs_to :animal
+end
 ```
-
-
-
-## Description
-
-
-- The Faker gem offered in Ruby is one of my favorite, incorporating it into this project was step 1. It is used to fill in information about characters in the SPA. Mostly for fantastical sounding names and background information. The seed file is filled with the use of this gem. 
-
-- The DnD API that was used to provide information about a character's weapons. This added some difficulty in the way the front end was coded. The backend uses the api to grab all spells and weapon information for the character. This information is then updated to state while the attack and spell power of each character is updated by multiplying each spells level and damage power. There were a lot of learning opportunites because of this added functionality.
-
-- This SPA uses the Material UI framework which makes it the best-looking website that I have ever created, since the last one. I used some of the readily available examples from the Material ui docs and altered some of them because I needed additional styling or functionality. Using the API docs for components to obtain the correct props was a great learning experience.
-
-- This SPA uses two separate GET requests to the backend, each returning all of the characters with their associated spells or all spells. There are three POST requests, the first two allow the user to enter information about a spell or character. The new spell or character uses the data input by the user to create the new instance and record but it also fetches information from the dnd API to give a user and character actual values in their total attack power. The third is a POST request to the spells table but the url includes the "characters" as a resource, so the structure would be resource/identifier/resource.
-
-- There are two PATCH requests, both to characters. The general request to the "/characters/id" url may have the attributes of that character changed and saved to the table. The specific patch to the "/characters/id/spells" url will only add an existing spell to a characters spells.
 
 ## Instructional-GIF
 
@@ -628,42 +246,13 @@ The ```<Fight>``` component renders a couple of cards for each fighter and oppon
 
 ![](https://media.giphy.com/media/ZST0K2MMA36sLtDxgw/giphy.gif)
 
-***Add an existing spell to a character***
-
-![](https://media.giphy.com/media/KjYIHKs9qFTuwSID10/giphy.gif)
-
-***Update a character***
-
-![](https://media.giphy.com/media/vtodu4IVIwXXTTlDeV/giphy.gif)
-
-***List each characters spells***
-
-![](https://media.giphy.com/media/dR0PYWVoO1BbfJahs7/giphy.gif)
-
-***Create a new spell***
-
-![](https://media.giphy.com/media/Y8a2peA7EtBwCY3dac/giphy.gif)
-
-***Create a new spell and add it to a character***
-
-![](https://media.giphy.com/media/JOG1g2CX9k6Itp0TdX/giphy.gif)
-
-***Character battle arena***
-
-![](https://media.giphy.com/media/VeduDaJLcuiI2ikkOB/giphy.gif)
-
-
 
 ## Video-Describing-Functionality
 
     
-   [![Watch the video](https://i.imgur.com/bWUcmyd.png)](https://youtu.be/eUogGOHnCl4)
+   [![Watch the video](https://i.imgur.com/hflCrGx.png)](https://youtu.be/rH4aGM5Rb3M)
 
-  
 
-## Credits
-
-This project uses the free API from D&D 5e API - The 5th Edition Dungeons and Dragons API [dnd5eapi](https://www.dnd5eapi.co/api)
 
 
 
@@ -685,5 +274,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
   
 
-![](https://img.shields.io/github/commit-activity/w/Bambam320/phase-3-dndpedia-project)
+![](https://img.shields.io/github/commit-activity/m/Bambam320/phase-4-vetapp-project)
 
