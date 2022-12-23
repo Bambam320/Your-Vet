@@ -28,6 +28,7 @@ const Login = () => {
     });
   };
 
+  //handles the login request to the backend and sets the current user and navigates to appointments if set correctly
   function handleSubmit(e) {
     e.preventDefault();
     fetch("/login", {

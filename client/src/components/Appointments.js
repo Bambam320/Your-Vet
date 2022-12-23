@@ -12,12 +12,12 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 
 function Appointments() {
+  //sets state from useContext
   const { currentUser, appointments } = useContext(LoggedUserContext);
-console.log("from appointments", appointments)
-console.log('currentUser from appointments', currentUser)
+
   return (
     <div className='project-list'>
-      {currentUser.role === 'doc' ? 
+      {currentUser.role === 'doc' ?
         <Button
           component={Link}
           to="/appointments/new"
@@ -29,7 +29,7 @@ console.log('currentUser from appointments', currentUser)
         >
           Create new Appointment
           <input hidden accept="image/*" multiple type="file" />
-        </Button> : <></> }
+        </Button> : <></>}
       <Outlet />
       <section>
         {appointments.map((appointment) => (

@@ -1,8 +1,10 @@
 class SessionsController < ApplicationController
+  #rescues exceptions when data is not found or invalid
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   wrap_parameters format: []
   
+  # finds a user and authenticates them then returns the user with associated data based on the type of user thats logged in
   # /login
   def create
     user = User.find_by(username: user_params[:username])
@@ -17,14 +19,20 @@ class SessionsController < ApplicationController
     end    
   end
   
+  #if the user is logged in, the users data and all associated information will be returned
   # /me
   def show
     if session[:user_id]
       user = User.find(session[:user_id])
+      if user.user_info_type == 'Doctor'
       render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: :ok
+      else
+      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: :ok
+      end
     end
   end
 
+  #the user in the sessions will be automatically logged out
   # /logout
   def destroy
     session[:user_id] = nil
@@ -33,10 +41,12 @@ class SessionsController < ApplicationController
 
   private 
 
+  #sets the user_params
   def user_params
     params.permit(:username, :password, :role)
   end
 
+  #returns the errors in case the exceptions are raised
   def render_unprocessable_entity_response invalid
     render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end

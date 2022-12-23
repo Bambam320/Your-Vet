@@ -14,36 +14,35 @@ import Card from '@mui/material/Card';
 function Profile() {
   const { currentUser } = useContext(LoggedUserContext);
 
-
-
-return (
-  <div>
-    <Box
-      variant="outlined"
-      sx={{
-        maxWidth: 350,
-        margin: 'auto',
-        marginTop: '-50px',
-        marginBottom: '25px'
-      }}
-    >
-      <Link to="/users/">View {`${currentUser.role === 'doc' ? 'Colleagues' : 'Friends'}`}</Link>
-    </Box>
-    <Box sx={{ maxWidth: 350, margin: 'auto' }}>
-      <Card variant="outlined">
-        {currentUser.role === 'doc' ?
-          <DoctorProfileCard doctor={currentUser} />
-          :
-          currentUser.role === 'pet' ?
-            <AnimalProfileCard animal={currentUser} />
+  //returns the currently logged in users profile
+  return (
+    <div>
+      <Box
+        variant="outlined"
+        sx={{
+          maxWidth: 350,
+          margin: 'auto',
+          marginTop: '-50px',
+          marginBottom: '25px'
+        }}
+      >
+        <Link to="/users/">View {`${currentUser.role === 'doc' ? 'Colleagues' : 'Friends'}`}</Link>
+      </Box>
+      <Box sx={{ maxWidth: 350, margin: 'auto' }}>
+        <Card variant="outlined">
+          {currentUser.role === 'doc' ?
+            <DoctorProfileCard doctor={currentUser} />
             :
-            <></>
-        }
-      </Card>
-    </Box>
-    <Outlet />
-  </div>
-);
+            currentUser.role === 'pet' ?
+              <AnimalProfileCard animal={currentUser} />
+              :
+              <></>
+          }
+        </Card>
+      </Box>
+      <Outlet />
+    </div>
+  );
 
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
 const LoggedIn = ({currentUser}) => {
-
+  //sets the logged in users name at the top of the page
   return (
     <div style={{paddingTop: "1em", marginRight: '3em'}}>
       {currentUser.id > 0 ? 

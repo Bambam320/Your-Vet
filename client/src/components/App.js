@@ -15,6 +15,7 @@ import Profile from './Profile';
 import AllProfileCard from './AllProfileCard'
 
 function App() {
+  // assigning a defaultValue to the currentUser for validity of variables in children components
   const defaultValues = {
     id: 0,
     role: '',
@@ -27,6 +28,8 @@ function App() {
       }
     }
   }
+
+  //Assigning state
   const [currentUser, setCurrentUser] = useState(defaultValues)
   const [appointments, setAppointments] = useState([])
   const navigate = useNavigate()
@@ -49,8 +52,7 @@ function App() {
       })
   }
 
-console.log(currentUser)
-
+  //appointments will be updated to state upon user login or signup to be used in children components
   useEffect(() => {
     currentUser.user_info_type === 'Doctor' 
       ? 
@@ -66,9 +68,13 @@ console.log(currentUser)
         <Route path="/" element={<Navbar handleLogout={handleLogout} />}>
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
-          <Route path="appointments/" element={<Appointments currentUser={currentUser} />} >
-            <Route path="new" element={<AppointmentForm />} />
-          </Route>
+          {currentUser.id > 0 ?
+            <Route path="appointments/" element={<Appointments currentUser={currentUser} />} > 
+              <Route path="new" element={<AppointmentForm />} />
+            </Route>           
+            : 
+            <React.Fragment>Loading</React.Fragment>
+          }
           <Route path="users/" element={<AllProfileCard currentUser={currentUser} />} >
             <Route path="new" element={<Signup />} />
             <Route path=":id" element={<Profile />} />

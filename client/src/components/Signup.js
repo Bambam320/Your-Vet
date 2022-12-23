@@ -61,7 +61,7 @@ function Signup() {
   }
   //set form to either doctor or pet style from state
   let formToDisplay = alignment === 'doc' ? doctorForm : petForm
-  //
+  //renders an input option for each value in the object
   let displayForm = Object.entries(formToDisplay).map((entry, i) => {
     return (
       <label key={i}>

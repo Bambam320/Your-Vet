@@ -11,12 +11,12 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 
 function AllProfileCard({ currentUser }) {
+  //assigning state
   const [doctorUsers, setDoctorUsers] = useState([]);
   const [animalUsers, setAnimalUsers] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  console.log("allprofile card is firing")
-
+  //fetching all users associated to a doctor or an animal
   useEffect(() => {
     fetch("/users")
       .then((res) => {
@@ -34,6 +34,7 @@ function AllProfileCard({ currentUser }) {
       })
   }, [errors])
 
+  //mapping over the doctors and listing each one through DoctorProfileCard
   let doctors = doctorUsers.map((doctor) => {
     return (
       <Box sx={{ maxWidth: 350, margin: 'auto' }}>
@@ -44,6 +45,7 @@ function AllProfileCard({ currentUser }) {
     )
   })
 
+  //mapping over the animals and listing each one through AnimalProfileCard
   let animals = animalUsers.map((animal) => {
     return (
       <Box sx={{ maxWidth: 350, margin: 'auto' }}>
@@ -54,6 +56,7 @@ function AllProfileCard({ currentUser }) {
     )
   })
 
+  //rendering the correct card based on the logged in user
   return (
     <div>
       {currentUser.role === 'doc' ?

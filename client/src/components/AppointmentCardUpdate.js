@@ -3,16 +3,18 @@ import React, { useState, useContext, useEffect } from 'react'
 import { LoggedUserContext } from './LoggedUserContext';
 
 function AppointmentCardUpdate({ appointment, changeToggle, setErrors, doctorName }) {
+  //setting state with the form and appointments
   const [form, setForm] = useState(appointment);
   const { setAppointments, appointments } = useContext(LoggedUserContext);
 
+  //controlling the input and setting state for each change
   function handleChange(e) {
     let name = e.target.name;
     let value = e.target.value;
     setForm({ ...form, [name]: value });
   }
-  console.log(" from appointment card update", appointment)
-
+  
+  // updating the server with the new information for the appointment and setting state with the updated appointment then change the toggle back to close
   function handleUpdateSubmit(e) {
     e.preventDefault()
     fetch(`/appointments/${appointment.id}`, {
@@ -24,9 +26,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors, doctorNam
     }).then((res) => {
       if (res.ok) {
         res.json().then((updatedAppointment) => {
-          console.log("updated appointment", updatedAppointment)
           const updatedAppointments = appointments.map((app) => {
-            console.log("app", app)
             if (app.id === updatedAppointment.id) {
               return updatedAppointment
             } else {
@@ -42,6 +42,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors, doctorNam
     changeToggle()
   }
 
+  // changes the toggle to make the form disappear
   function handleCancel() {
     changeToggle()
   }

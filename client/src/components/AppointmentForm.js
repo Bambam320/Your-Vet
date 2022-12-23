@@ -11,6 +11,7 @@ import { MenuItem, Select, Button } from "@mui/material";
 
 
 const AppointmentForm = () => {
+  //sets default form values for the new appointment
   const defaultFormValues = {
     doctor_id: 0,
     animal_id: 0,
@@ -20,6 +21,8 @@ const AppointmentForm = () => {
     diagnosis: "",
     prognosis: "",
   }
+
+  //sets the intial state
   const { setAppointments, appointments, currentUser, setCurrentUser } = useContext(LoggedUserContext);
   const [errors, setErrors] = useState([]);
   const [formData, setFormData] = useState(defaultFormValues);
@@ -27,6 +30,7 @@ const AppointmentForm = () => {
   const [chosenAnimal, setChosenAnimal] = useState({ id: '' });
   let navigate = useNavigate()
 
+  // fetches all the animals for listing as an option
   useEffect(() => {
     fetch('/animals')
       .then((response) => {
@@ -39,6 +43,7 @@ const AppointmentForm = () => {
       });
   }, [])
 
+  // sets the form data automatically
   function handleChange(e) {
     setFormData({
       ...formData,
@@ -46,9 +51,9 @@ const AppointmentForm = () => {
     });
   }
 
+  // sets state and updates the form with the selected animal
   function handleAnimalSelect(e) {
     let thisAnimal = animals.find((animal) => animal.id === e.target.value)
-    console.log("thisAnimal", thisAnimal)
     setChosenAnimal(thisAnimal)
     setFormData({
       ...formData,
@@ -56,6 +61,7 @@ const AppointmentForm = () => {
     });
   }
 
+  // submits the appointment to the backend and adds the doctors id to the form
   function handleSubmit(e) {
     let newAppointment = {
       ...formData,
@@ -69,12 +75,11 @@ const AppointmentForm = () => {
       },
       body: JSON.stringify(newAppointment),
     }).then((response) => {
+      // removes the associated doctor and animal so that the new appointment data matches the appointment data of the current user and updates it
       if (response.ok) {
         response.json().then((newAppointment) => {
           delete newAppointment.doctor
           delete newAppointment.animal
-  console.log("newappointment from appointment form", newAppointment)
-  console.log('appointments from appointmentform', appointments)
           setAppointments([...appointments, newAppointment])});
           setCurrentUser({...currentUser, user_info: {...currentUser.user_info, doctor: {...currentUser.user_info.doctor, animals: [...currentUser.user_info.doctor.animals, chosenAnimal]}}})
           navigate('/appointments')
@@ -84,6 +89,7 @@ const AppointmentForm = () => {
     });
   }
 
+  // Lists an animal as a menu item in the select drop down
   const listAnimals = animals.map((animal) => {
     let id = animal.id
     return (

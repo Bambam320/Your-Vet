@@ -60,6 +60,7 @@ function AppointmentCard({ appointment }) {
     setUpdateToggle(!updateToggle);
   }
 
+  // holds the jsx to render in the return each appointment
   const card = (
     <React.Fragment>
       <CardContent>

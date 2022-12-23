@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { Card } from '@mui/material';
 
 function Patients() {
+  //sets sort by options
   const sortOptions = [
     { value: '', text: 'Select' },
     { value: 'name', text: 'Patient Name A-Z' },
@@ -18,16 +19,19 @@ function Patients() {
     { value: 'age young', text: 'Age: Youngest first' },
   ]
 
+  //sets state for the document
   const { currentUser } = useContext(LoggedUserContext);
   const [animals, setAnimals] = useState([]);
   const [errors, setErrors] = useState([]);
   const [sortBy, setSortBy] = useState(sortOptions[0].value);
   const [searchTerm, setSearchTerm] = useState('')
-console.log(currentUser)
+
+  //sets the animals with the current doctors associated animals
   useEffect(() => {
     setAnimals(currentUser.user_info.doctor.animals)
   }, [])
 
+  //filters by search term and sorts by several options
   const listAnimals = animals
     .filter((animal) => animal.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
@@ -43,6 +47,7 @@ console.log(currentUser)
         default: return true
       }
     })
+    //then maps over each animal and returns a card for it
     .map((animal) => {
       const { age,
         breed,
@@ -58,36 +63,38 @@ console.log(currentUser)
       return (
         <React.Fragment key={animal.id}>
           <Card sx={{ maxWidth: 400, margin: '2em' }}>
-          <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Name: ${name}` }</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Breed: ${breed}` }</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Sex: ${sex}` }</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Disposition: ${disposition}` }</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Color: ${color}`}</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Classification: ${classification}`}</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Age: ${age}`}</Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Noted for patient ${id}: ${notes}`}</Typography>
+            <CardContent>
               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              { `Pre-exisiting conditions: ${existing_conditions}`}</Typography>
-          </CardContent>
+                {`Name: ${name}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Breed: ${breed}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Sex: ${sex}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Disposition: ${disposition}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Color: ${color}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Classification: ${classification}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Age: ${age}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Noted for patient ${id}: ${notes}`}</Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {`Pre-exisiting conditions: ${existing_conditions}`}</Typography>
+            </CardContent>
           </Card >
         </React.Fragment>
       )
     })
 
+  //sets the search term automatically
   function handleChange(e) {
     setSearchTerm(e.target.value)
     console.log("e from appointmentform", e.target.value)
   }
 
+  //sets the sort value automatically
   function handleSortChange(e) {
     setSortBy(e.target.value)
   }
@@ -106,7 +113,7 @@ console.log(currentUser)
         ></input>}
       </label>
       <label>Filter By:</label>
-      <select value={sortBy} onChange={handleSortChange} style={{marginBottom: '1em'}}>
+      <select value={sortBy} onChange={handleSortChange} style={{ marginBottom: '1em' }}>
         {sortOptions.map((option) => (
           <option
             key={option.value}
