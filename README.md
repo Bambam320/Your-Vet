@@ -58,7 +58,7 @@ Then run the following to start the server.
 rails s
 ```
 
-Enjoy!.
+Enjoy!
 
 Clone the repo [from Github here](https://github.com/Bambam320/phase-4-vetapp-project)
 
@@ -70,7 +70,7 @@ The SPA's functions are described below with imagery and code to best demonstrat
 
 ***SPA Component Tree***
 
-The component tree includes an index file that attaches the react app to the DOM. Then an ```<App>``` component provides context and routing for all children's elements. The first is a ```<NavBar>``` component that provides a logo and links which vary by the type of user logged in if logged in at all. The ```<LoggedIn>``` component provides the name of the currently logged in user. The next is the ```<Login component>``` component which displays the main page with a title. The next is the ```<Characters>``` component which has children called ```<CharacterSpells>```, ```<UpdateCharacter>``` and ```<CharacterCards>``` these are reponsible for listing characters and when selected, their spells or a form to update them. The next is the ```<Spells>``` component which offers a form and drop down for creating or adding spells to a character. The next is the ```<CreateACharacter>``` component which offers a form to input attributes to a character that will be created. The last is the ```<Fight>``` component, which lists cards for both fighters and allows them to fight.
+The component tree includes an index file that attaches the react app to the DOM. Then an ```<App>``` component provides context and routing for all children's elements. The first is a ```<NavBar>``` component that provides a logo and links which vary by the type of user logged in if logged in at all. The ```<LoggedIn>``` component provides the name of the currently logged in user. The next is the ```<Appointments>``` component which displays all appointments by using the ```<AppointmentCard>``` for each appointment. The ```<AppointmentCardUpdate>``` component provides a form that can be used by the doctor to update the appointment information. The ```<AppointmentForm>``` component provides a form which the doctor can use to create a new appointment. The ```<AllProfileCard>``` and ```<ProfileCard>``` components will render a ```<DoctorProfileCard>``` or ```<AnimalProfileCard>``` component based on what type of user is logged in. The next is the ```<Signup>``` component that offers a form for a user or a doctor to sign up. Last is the ```<Patients>``` component which shows the logged in doctors current patients.
 ```
 Index from the src folder
 └── App 
@@ -95,11 +95,11 @@ Index from the src folder
 
 Each character in the schema has many spells and each spell belongs to a single character.
 
-![](images/Entity_Relationship_Model.png  "Entity Relationship Model")
+![](images/ERM.png  "Entity Relationship Model")
 
-***Home Page***
+***SignUp Page***
 
-![](images/Homepage.png  "Home Page Example")
+![](images/Signup.png  "Sign Up Page Example")
 
 The Home component renders via the link ```<Home>``` from the NavBar, the other components shown here are the ```<Background>``` and ```<NavBar>``` components. They are shown on every single page and are available to all components.
 ```
