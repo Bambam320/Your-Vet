@@ -109,14 +109,14 @@ function Signup() {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          console.log("useruseruser", user)
-          setCurrentUser(user)});
-        navigate("/appointments")
-      } else {
-        res.json().then((err) => setErrors(err.errors));
-      }
-      setDoctorForm(defaultDoctorValues)
-      setPetForm(defaultPetValues)
+          setCurrentUser(user)
+          setTimeout(navigate("/appointments"), 1000);
+        });
+        } else {
+          res.json().then((err) => setErrors(err.errors));
+        }
+        setDoctorForm(defaultDoctorValues)
+        setPetForm(defaultPetValues)
     });
   }
 

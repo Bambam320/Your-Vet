@@ -18,13 +18,12 @@ function AppointmentCard({ appointment }) {
   const [errors, setErrors] = useState([])
   const { currentUser, setAppointments, appointments } = useContext(LoggedUserContext)
 
-  // const { a}
+  // updates the state to control whether or not the update form is visible
   function onUpdateToggle() {
     setUpdateToggle(!updateToggle);
   }
 
-console.log("appointment from appointment card", appointment)
-  
+  // assigns variables with information to display for each card based on the user being an animal or a doctor
   const {
     id,
     time,
@@ -32,9 +31,10 @@ console.log("appointment from appointment card", appointment)
     concern,
     diagnosis
   } = appointment
-  let animalName = currentUser.user_info.doctor.animals.find((animal) => animal.id === appointment.animal_id).name
-  let doctorName = currentUser.user_info.doctor.name
+  let animalName = currentUser.user_info_type === 'Doctor' ? currentUser.user_info.doctor.animals.find((animal) => animal.id === appointment.animal_id).name : currentUser.user_info.animal.name
+  let doctorName = currentUser.user_info_type === 'Doctor' ? currentUser.user_info.doctor.name : currentUser.user_info.animal.doctors.find((doctor) => doctor.id === appointment.doctor_id).name
 
+  // deletes an appointment in the back end and filters out the deleted review from stateheld appointments
   function handleDeleteClick(e) {
     e.preventDefault();
     fetch(`/appointments/${id}`, {
@@ -55,6 +55,7 @@ console.log("appointment from appointment card", appointment)
     });
   }
 
+  //updates the toggle state when the update is clicked
   function onUpdateToggle() {
     setUpdateToggle(!updateToggle);
   }
@@ -67,6 +68,8 @@ console.log("appointment from appointment card", appointment)
           appointment={appointment} 
           setErrors={setErrors}
           changeToggle={onUpdateToggle} 
+          animalName={animalName}
+          doctorName={doctorName}
         />
       ) : (
         <></>

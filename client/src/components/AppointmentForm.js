@@ -20,7 +20,7 @@ const AppointmentForm = () => {
     diagnosis: "",
     prognosis: "",
   }
-  const { setAppointments, appointments, currentUser } = useContext(LoggedUserContext);
+  const { setAppointments, appointments, currentUser, setCurrentUser } = useContext(LoggedUserContext);
   const [errors, setErrors] = useState([]);
   const [formData, setFormData] = useState(defaultFormValues);
   const [animals, setAnimals] = useState([]);
@@ -71,8 +71,12 @@ const AppointmentForm = () => {
     }).then((response) => {
       if (response.ok) {
         response.json().then((newAppointment) => {
-  
+          delete newAppointment.doctor
+          delete newAppointment.animal
+  console.log("newappointment from appointment form", newAppointment)
+  console.log('appointments from appointmentform', appointments)
           setAppointments([...appointments, newAppointment])});
+          setCurrentUser({...currentUser, user_info: {...currentUser.user_info, doctor: {...currentUser.user_info.doctor, animals: [...currentUser.user_info.doctor.animals, chosenAnimal]}}})
           navigate('/appointments')
       } else {
         response.json().then((err) => setErrors(err.errors));

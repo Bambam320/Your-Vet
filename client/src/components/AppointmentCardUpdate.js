@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { LoggedUserContext } from './LoggedUserContext';
 
-function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
+function AppointmentCardUpdate({ appointment, changeToggle, setErrors, doctorName }) {
   const [form, setForm] = useState(appointment);
   const { setAppointments, appointments } = useContext(LoggedUserContext);
 
@@ -11,7 +11,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
     let value = e.target.value;
     setForm({ ...form, [name]: value });
   }
-  console.log(appointment)
+  console.log(" from appointment card update", appointment)
 
   function handleUpdateSubmit(e) {
     e.preventDefault()
@@ -49,7 +49,7 @@ function AppointmentCardUpdate({ appointment, changeToggle, setErrors }) {
 
   return (
     <>
-      <div>{`Change the details of your appointment with ${appointment.doctor.name}`}</div>
+      <div>{`Change the details of your appointment with ${doctorName}`}</div>
       <form onSubmit={handleUpdateSubmit}>
         <label>
           <span>Update the time:</span>

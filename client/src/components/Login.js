@@ -39,8 +39,8 @@ const Login = () => {
     }).then((res) => {
       if (res.ok) {
         res.json().then((user) => {
-          setCurrentUser(user)
-          setTimeout(navigate("/appointments"), 500)
+          setCurrentUser(user);
+          setTimeout(navigate("/appointments"), 500);
         });
       } else {
         console.log("the error is firing")

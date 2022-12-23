@@ -43,8 +43,8 @@ function App() {
     fetch("/logout", { method: "DELETE" })
       .then((res) => {
         if (res.ok) {
-          setCurrentUser(defaultValues)
           navigate('/')
+          setCurrentUser(defaultValues)
         }
       })
   }
@@ -57,7 +57,7 @@ console.log(currentUser)
         setAppointments(currentUser.user_info.doctor.appointments)
       :
         setAppointments(currentUser.user_info.animal.appointments)
-    }, [])
+    }, [currentUser])
 
   //provides context to and route to entire app
   return (

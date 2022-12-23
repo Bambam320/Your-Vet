@@ -11,8 +11,9 @@ class AnimalsController < ApplicationController
   def index
     user = User.find(session[:user_id])
     if user.user_info_type == 'Doctor'
-      animals_with_set_appointments = Appointment.where('doctor_id = ?', user.user_info_id).map { |apps| apps.animal_id}
-      render json: Animal.where.not("id IN (?)", animals_with_set_appointments), status: :ok
+      animals_with_set_appointments = Appointment.where('doctor_id = ?', user.user_info_id).map { |apps| apps.animal_id }
+      animals_with_set_appointments.length > 0 ? nil : animals_with_set_appointments = [0]
+      render json: Animal.where.not("id IN (?)", animals_with_set_appointments).order(:name), status: :ok
     else
       render json: Animal.all, status: :ok
     end

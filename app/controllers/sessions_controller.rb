@@ -6,9 +6,12 @@ class SessionsController < ApplicationController
   # /login
   def create
     user = User.find_by(username: user_params[:username])
-    if user&.authenticate(user_params[:password])
+    if user.user_info_type == 'Doctor' && user.authenticate(user_params[:password])
       session[:user_id]= user.id
       render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
+    elsif user.user_info_type == 'Animal' && user.authenticate(user_params[:password])
+      session[:user_id]= user.id
+      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: 201
     else
       render json: { errors: ["Username or Password is incorrect"] }, status: :unprocessable_entity
     end    

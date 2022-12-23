@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
     #  Users#Signup
     def create
+      
       if params[:role] == 'doc'
       permitted_doctor_params = params.extract!(:phone_number, :name, :address, :degree, :logo, :university, :specialty).permit!
       doctor = Doctor.create!(permitted_doctor_params)
@@ -30,7 +31,7 @@ class UsersController < ApplicationController
       ).permit!
       user = animal.create_user!(permitted_user_params)
       session[:user_id] = user.id
-      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
+      render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: 201
       end
     end
   

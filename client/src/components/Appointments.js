@@ -13,7 +13,8 @@ import Stack from '@mui/material/Stack';
 
 function Appointments() {
   const { currentUser, appointments } = useContext(LoggedUserContext);
-console.log(appointments)
+console.log("from appointments", appointments)
+console.log('currentUser from appointments', currentUser)
   return (
     <div className='project-list'>
       {currentUser.role === 'doc' ? 
