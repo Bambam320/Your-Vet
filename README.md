@@ -238,21 +238,19 @@ end
 
 ## Instructional-GIF
 
-***Create a Character***
+***Login***
 
-![](https://media.giphy.com/media/1wEa9ED3VG0bSLwUKf/giphy.gif)
+![](https://media.giphy.com/media/47mcaSeFTi7sjNC6Tt/giphy.gif)
 
-***Set a character as challenger or delete them***
+***Updating and deleting appointments***
 
-![](https://media.giphy.com/media/ZST0K2MMA36sLtDxgw/giphy.gif)
+![](https://media.giphy.com/media/mVVW24GOYasetICweF/giphy.gif)
 
 
 ## Video-Describing-Functionality
 
     
    [![Watch the video](https://i.imgur.com/hflCrGx.png)](https://youtu.be/rH4aGM5Rb3M)
-
-
 
 
 
