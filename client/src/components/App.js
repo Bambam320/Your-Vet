@@ -69,7 +69,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           {currentUser.id > 0 ?
-            <Route path="appointments/" element={<Appointments currentUser={currentUser} />} > 
+            <Route path="appointments/" element={<Appointments />} > 
               <Route path="new" element={<AppointmentForm />} />
             </Route>           
             : 

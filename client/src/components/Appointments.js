@@ -31,11 +31,14 @@ function Appointments() {
           <input hidden accept="image/*" multiple type="file" />
         </Button> : <></>}
       <Outlet />
+      {!appointments?
+      <></>
+      :
       <section>
         {appointments.map((appointment) => (
           <AppointmentCard key={appointment.id} appointment={appointment} />
         ))}
-      </section>
+      </section>}
     </div>
   );
 };
