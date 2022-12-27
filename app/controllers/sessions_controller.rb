@@ -29,6 +29,8 @@ class SessionsController < ApplicationController
       else
       render json: user, include: ['user_info', 'user_info.appointments', 'user_info.doctors'], status: :ok
       end
+    else
+      render json: {}, status: :not_found
     end
   end
 

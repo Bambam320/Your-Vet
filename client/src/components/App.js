@@ -37,7 +37,11 @@ function App() {
   // fetch on render to auto-login
   useEffect(() => {
     fetch("/me").then((r) => {
-      r.ok ? r.json().then((user) => setCurrentUser(user)) : setCurrentUser(null);
+      if (r.ok) {
+        r.json().then((user) => setCurrentUser(user))
+      } else {
+        setCurrentUser(defaultValues)
+      }
     });
   }, []);
 
