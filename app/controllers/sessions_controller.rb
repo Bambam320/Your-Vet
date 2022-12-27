@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   # finds a user and authenticates them then returns the user with associated data based on the type of user thats logged in
   # /login
   def create
-    user = User.find_by(username: user_params[:username])
+    user = User.find_by!(username: user_params[:username])
     if user.user_info_type == 'Doctor' && user.authenticate(user_params[:password])
       session[:user_id]= user.id
       render json: user, include: ['user_info', 'user_info.appointments', 'user_info.animals'], status: 201
