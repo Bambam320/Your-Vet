@@ -4,10 +4,10 @@ class DoctorsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
   # def topthree
-    # go through each doctor and find the length of their appointments
-    # return the sorted appointments from most to least
-    # return the first 3 Appointments
-    # add a key to each doctor containing the length of appointments for each
+  #   go through each doctor and find the length of their appointments
+  #   return the sorted appointments from most to least
+  #   return the first 3 Appointments
+  #   add a key to each doctor containing the length of appointments for each
   #   new_array = []
   #   doctors = Doctor.all.each do |doc|
   #     new_array << {:name => doc.name, :count => doc.appointments.length}
